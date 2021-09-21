@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2021 - for information on the respective copyright owner
+  ~ see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
+  ~
+  ~ SPDX-License-Identifier: Apache-2.0
+  -->
+<Configuration>
+    <Appenders>
+        <List name="STDERR" />
+        <List name="WARNINGS">
+            <filters>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </filters>
+        </List>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="STDERR"/>
+            <AppenderRef ref="WARNINGS"/>
+        </Root>
+    </Loggers>
+</Configuration>
