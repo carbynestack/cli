@@ -87,8 +87,8 @@ jobs:
             }]
       - name: Update Maven project version
         run: mvn versions:set -DnewVersion=${{ env.VERSION }} -DprocessAllModules -DgenerateBackupPoms=false
-      - name: Publish SNAPSHOT version to GitHub Packages and Docker Image on GHCR
-        run: mvn deploy -Dskip.tests --batch-mode --no-transfer-progress
+      - name: Build artifact
+        run: mvn package -Dskip.tests --batch-mode --no-transfer-progress
       - name: Publish release
         uses: ncipollo/release-action@v1
         with:
@@ -96,3 +96,4 @@ jobs:
           allowUpdates: true
           draft: false
           omitBodyDuringUpdate: true
+          artifacts: "target/cli-${{ env.VERSION }}-jar-with-dependencies.jar"
