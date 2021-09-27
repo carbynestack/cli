@@ -4,33 +4,25 @@
          <name>amphora-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-common</artifactId>
-         <version>0.1-SNAPSHOT-1196730614-5-e3c8489</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257676920-1-1db68bb</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/amphora-common/0.1-SNAPSHOT-1196730614-5-e3c8489/amphora-common-0.1-SNAPSHOT-1196730614-5-e3c8489.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>amphora-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1196730614-5-e3c8489</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257676920-1-1db68bb</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/amphora-java-client/0.1-SNAPSHOT-1196730614-5-e3c8489/amphora-java-client-0.1-SNAPSHOT-1196730614-5-e3c8489.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Commons Codec</name>
@@ -38,16 +30,12 @@
          <artifactId>commons-codec</artifactId>
          <version>1.11</version>
          <projectUrl>http://commons.apache.org/proper/commons-codec/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/commons-codec/commons-codec/1.11/commons-codec-1.11.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Commons IO</name>
@@ -55,16 +43,12 @@
          <artifactId>commons-io</artifactId>
          <version>2.11.0</version>
          <projectUrl>https://commons.apache.org/proper/commons-io/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Commons Lang</name>
@@ -72,16 +56,12 @@
          <artifactId>commons-lang3</artifactId>
          <version>3.12.0</version>
          <projectUrl>https://commons.apache.org/proper/commons-lang/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Commons Logging</name>
@@ -89,16 +69,12 @@
          <artifactId>commons-logging</artifactId>
          <version>1.2</version>
          <projectUrl>http://commons.apache.org/proper/commons-logging/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.2/commons-logging-1.2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Commons Text</name>
@@ -106,16 +82,12 @@
          <artifactId>commons-text</artifactId>
          <version>1.9</version>
          <projectUrl>https://commons.apache.org/proper/commons-text</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.9/commons-text-1.9.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache HttpClient</name>
@@ -123,16 +95,12 @@
          <artifactId>httpclient</artifactId>
          <version>4.5.13</version>
          <projectUrl>http://hc.apache.org/httpcomponents-client</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache HttpCore</name>
@@ -140,16 +108,12 @@
          <artifactId>httpcore</artifactId>
          <version>4.4.13</version>
          <projectUrl>http://hc.apache.org/httpcomponents-core-ga</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Log4j API</name>
@@ -157,16 +121,12 @@
          <artifactId>log4j-api</artifactId>
          <version>2.14.1</version>
          <projectUrl>https://logging.apache.org/log4j/2.x/log4j-api/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.14.1/log4j-api-2.14.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Log4j Core</name>
@@ -174,16 +134,12 @@
          <artifactId>log4j-core</artifactId>
          <version>2.14.1</version>
          <projectUrl>https://logging.apache.org/log4j/2.x/log4j-core/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.14.1/log4j-core-2.14.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Apache Log4j SLF4J Binding</name>
@@ -191,112 +147,84 @@
          <artifactId>log4j-slf4j-impl</artifactId>
          <version>2.14.1</version>
          <projectUrl>https://logging.apache.org/log4j/2.x/log4j-slf4j-impl/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.14.1/log4j-slf4j-impl-2.14.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Carbyne Stack Ephemeral Java Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>ephemeral-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1194430170-5-96fae18</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257716526-1-5deb524</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/ephemeral-java-client/0.1-SNAPSHOT-1194430170-5-96fae18/ephemeral-java-client-0.1-SNAPSHOT-1194430170-5-96fae18.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Carbyne Stack Java HTTP Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>java-http-client</artifactId>
-         <version>0.1-SNAPSHOT-1193367082-3-a381e87</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257534854-1-46815a7</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/java-http-client/0.1-SNAPSHOT-1193367082-3-a381e87/java-http-client-0.1-SNAPSHOT-1193367082-3-a381e87.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Carbyne Stack MP-SPDZ Integration Utilities</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>mp-spdz-integration</artifactId>
-         <version>0.1-SNAPSHOT-1193319462-5-5d143c4</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257545971-1-d751c28</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/mp-spdz-integration/0.1-SNAPSHOT-1193319462-5-5d143c4/mp-spdz-integration-0.1-SNAPSHOT-1193319462-5-5d143c4.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>castor-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-common</artifactId>
-         <version>0.1-SNAPSHOT-1193726399-21-ac3bce2</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257597392-1-6853da7</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/castor-common/0.1-SNAPSHOT-1193726399-21-ac3bce2/castor-common-0.1-SNAPSHOT-1193726399-21-ac3bce2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>castor-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1193726399-21-ac3bce2</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257597392-1-6853da7</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/castor-java-client/0.1-SNAPSHOT-1193726399-21-ac3bce2/castor-java-client-0.1-SNAPSHOT-1193726399-21-ac3bce2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>castor-upload-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-upload-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1193726399-21-ac3bce2</version>
-         <type>jar</type>
+         <version>0.1-SNAPSHOT-1257597392-1-6853da7</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
                <url>https://spdx.org/licenses/Apache-2.0.html</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://maven.pkg.github.com/carbynestack/*/io/carbynestack/castor-upload-java-client/0.1-SNAPSHOT-1193726399-21-ac3bce2/castor-upload-java-client-0.1-SNAPSHOT-1193726399-21-ac3bce2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Checker Qual</name>
@@ -304,16 +232,12 @@
          <artifactId>checker-qual</artifactId>
          <version>2.11.1</version>
          <projectUrl>https://checkerframework.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The MIT License</name>
                <url>http://opensource.org/licenses/MIT</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/checkerframework/checker-qual/2.11.1/checker-qual-2.11.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>error-prone annotations</name>
@@ -321,16 +245,12 @@
          <artifactId>error_prone_annotations</artifactId>
          <version>2.3.4</version>
          <projectUrl>http://nexus.sonatype.org/oss-repository-hosting.html/error_prone_parent/error_prone_annotations</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/errorprone/error_prone_annotations/2.3.4/error_prone_annotations-2.3.4.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>FindBugs-jsr305</name>
@@ -338,16 +258,12 @@
          <artifactId>jsr305</artifactId>
          <version>3.0.2</version>
          <projectUrl>http://findbugs.sourceforge.net/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Guava InternalFutureFailureAccess and InternalFutures</name>
@@ -355,16 +271,12 @@
          <artifactId>failureaccess</artifactId>
          <version>1.0.1</version>
          <projectUrl>https://github.com/google/guava/failureaccess</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Guava ListenableFuture only</name>
@@ -372,16 +284,12 @@
          <artifactId>listenablefuture</artifactId>
          <version>9999.0-empty-to-avoid-conflict-with-guava</version>
          <projectUrl>https://github.com/google/guava/listenablefuture</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Guava: Google Core Libraries for Java</name>
@@ -389,16 +297,12 @@
          <artifactId>guava</artifactId>
          <version>29.0-jre</version>
          <projectUrl>https://github.com/google/guava/guava</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/guava/guava/29.0-jre/guava-29.0-jre.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>J2ObjC Annotations</name>
@@ -406,16 +310,25 @@
          <artifactId>j2objc-annotations</artifactId>
          <version>1.3</version>
          <projectUrl>https://github.com/google/j2objc/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar</string>
-         </downloadUrls>
+      </dependency>
+      <dependency>
+         <name>Jackson-annotations</name>
+         <groupId>com.fasterxml.jackson.core</groupId>
+         <artifactId>jackson-annotations</artifactId>
+         <version>2.10.2</version>
+         <projectUrl>http://github.com/FasterXML/jackson</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
       </dependency>
       <dependency>
          <name>Jackson-core</name>
@@ -423,16 +336,12 @@
          <artifactId>jackson-core</artifactId>
          <version>2.12.3</version>
          <projectUrl>https://github.com/FasterXML/jackson-core</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.3/jackson-core-2.12.3.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>jackson-databind</name>
@@ -440,16 +349,12 @@
          <artifactId>jackson-databind</artifactId>
          <version>2.10.2</version>
          <projectUrl>http://github.com/FasterXML/jackson</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.10.2/jackson-databind-2.10.2.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>JBoss Logging 3</name>
@@ -457,16 +362,12 @@
          <artifactId>jboss-logging</artifactId>
          <version>3.4.1.Final</version>
          <projectUrl>http://www.jboss.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/jboss/logging/jboss-logging/3.4.1.Final/jboss-logging-3.4.1.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>JBoss Threads</name>
@@ -474,16 +375,12 @@
          <artifactId>jboss-threads</artifactId>
          <version>3.1.0.Final</version>
          <projectUrl>http://www.jboss.org/jboss-threads</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/jboss/threads/jboss-threads/3.1.0.Final/jboss-threads-3.1.0.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>jcommander</name>
@@ -491,16 +388,12 @@
          <artifactId>jcommander</artifactId>
          <version>1.72</version>
          <projectUrl>http://jcommander.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/beust/jcommander/1.72/jcommander-1.72.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>JUL to SLF4J bridge</name>
@@ -508,16 +401,12 @@
          <artifactId>jul-to-slf4j</artifactId>
          <version>1.7.30</version>
          <projectUrl>http://www.slf4j.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>MIT License</name>
                <url>http://www.opensource.org/licenses/mit-license.php</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/slf4j/jul-to-slf4j/1.7.30/jul-to-slf4j-1.7.30.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Project Lombok</name>
@@ -525,16 +414,12 @@
          <artifactId>lombok</artifactId>
          <version>1.18.20</version>
          <projectUrl>https://projectlombok.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The MIT License</name>
                <url>https://projectlombok.org/LICENSE</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>ScribeJava APIs</name>
@@ -542,16 +427,12 @@
          <artifactId>scribejava-apis</artifactId>
          <version>8.3.1</version>
          <projectUrl>https://github.com/scribejava/scribejava/scribejava-apis</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>MIT</name>
                <url>https://github.com/scribejava/scribejava/blob/master/LICENSE.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/github/scribejava/scribejava-apis/8.3.1/scribejava-apis-8.3.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>ScribeJava Core</name>
@@ -559,16 +440,12 @@
          <artifactId>scribejava-core</artifactId>
          <version>8.3.1</version>
          <projectUrl>https://github.com/scribejava/scribejava/scribejava-core</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>MIT</name>
                <url>https://github.com/scribejava/scribejava/blob/master/LICENSE.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/github/scribejava/scribejava-core/8.3.1/scribejava-core-8.3.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>ScribeJava Java 8+ compatibility stuff</name>
@@ -576,16 +453,12 @@
          <artifactId>scribejava-java8</artifactId>
          <version>8.3.1</version>
          <projectUrl>https://github.com/scribejava/scribejava/scribejava-java8</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>MIT</name>
                <url>https://github.com/scribejava/scribejava/blob/master/LICENSE.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/com/github/scribejava/scribejava-java8/8.3.1/scribejava-java8-8.3.1.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>SLF4J API Module</name>
@@ -593,16 +466,12 @@
          <artifactId>slf4j-api</artifactId>
          <version>1.7.30</version>
          <projectUrl>http://www.slf4j.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>MIT License</name>
                <url>http://www.opensource.org/licenses/mit-license.php</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.30/slf4j-api-1.7.30.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring AOP</name>
@@ -610,16 +479,12 @@
          <artifactId>spring-aop</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-aop/5.2.3.RELEASE/spring-aop-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Beans</name>
@@ -627,16 +492,12 @@
          <artifactId>spring-beans</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-beans/5.2.3.RELEASE/spring-beans-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Commons Logging Bridge</name>
@@ -644,16 +505,12 @@
          <artifactId>spring-jcl</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-jcl/5.2.3.RELEASE/spring-jcl-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Context</name>
@@ -661,16 +518,12 @@
          <artifactId>spring-context</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-context/5.2.3.RELEASE/spring-context-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Core</name>
@@ -678,16 +531,12 @@
          <artifactId>spring-core</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-core/5.2.3.RELEASE/spring-core-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Expression Language (SpEL)</name>
@@ -695,16 +544,12 @@
          <artifactId>spring-expression</artifactId>
          <version>5.2.1.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-expression/5.2.1.RELEASE/spring-expression-5.2.1.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Messaging</name>
@@ -712,16 +557,12 @@
          <artifactId>spring-messaging</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-messaging/5.2.3.RELEASE/spring-messaging-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Retry</name>
@@ -729,16 +570,12 @@
          <artifactId>spring-retry</artifactId>
          <version>1.2.5.RELEASE</version>
          <projectUrl>https://www.springsource.org</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/retry/spring-retry/1.2.5.RELEASE/spring-retry-1.2.5.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring Web</name>
@@ -746,16 +583,12 @@
          <artifactId>spring-web</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-web/5.2.3.RELEASE/spring-web-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Spring WebSocket</name>
@@ -763,16 +596,12 @@
          <artifactId>spring-websocket</artifactId>
          <version>5.2.3.RELEASE</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/spring-websocket/5.2.3.RELEASE/spring-websocket-5.2.3.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>spring-security-core</name>
@@ -780,16 +609,12 @@
          <artifactId>spring-security-core</artifactId>
          <version>5.2.1.RELEASE</version>
          <projectUrl>http://spring.io/spring-security</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/security/spring-security-core/5.2.1.RELEASE/spring-security-core-5.2.1.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>spring-security-web</name>
@@ -797,16 +622,12 @@
          <artifactId>spring-security-web</artifactId>
          <version>5.2.1.RELEASE</version>
          <projectUrl>http://spring.io/spring-security</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/springframework/security/spring-security-web/5.2.1.RELEASE/spring-security-web-5.2.1.RELEASE.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>tomcat-annotations-api</name>
@@ -814,16 +635,12 @@
          <artifactId>tomcat-annotations-api</artifactId>
          <version>9.0.30</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/tomcat/tomcat-annotations-api/9.0.30/tomcat-annotations-api-9.0.30.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>tomcat-embed-core</name>
@@ -831,16 +648,12 @@
          <artifactId>tomcat-embed-core</artifactId>
          <version>9.0.30</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/9.0.30/tomcat-embed-core-9.0.30.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>tomcat-embed-websocket</name>
@@ -848,16 +661,12 @@
          <artifactId>tomcat-embed-websocket</artifactId>
          <version>9.0.30</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/9.0.30/tomcat-embed-websocket-9.0.30.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Undertow Core</name>
@@ -865,16 +674,12 @@
          <artifactId>undertow-core</artifactId>
          <version>2.2.8.Final</version>
          <projectUrl>http://www.jboss.org/undertow-parent/undertow-core</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License Version 2.0</name>
                <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/io/undertow/undertow-core/2.2.8.Final/undertow-core-2.2.8.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Vavr</name>
@@ -882,16 +687,12 @@
          <artifactId>vavr</artifactId>
          <version>0.10.3</version>
          <projectUrl>http://vavr.io</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/io/vavr/vavr/0.10.3/vavr-0.10.3.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>Vavr Match</name>
@@ -899,16 +700,12 @@
          <artifactId>vavr-match</artifactId>
          <version>0.10.3</version>
          <projectUrl>http://vavr.io</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/io/vavr/vavr-match/0.10.3/vavr-match-0.10.3.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>WildFly Client Configuration</name>
@@ -916,16 +713,12 @@
          <artifactId>wildfly-client-config</artifactId>
          <version>1.0.1.Final</version>
          <projectUrl>http://www.jboss.org/wildfly-client-config</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License 2.0</name>
                <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/wildfly/client/wildfly-client-config/1.0.1.Final/wildfly-client-config-1.0.1.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>wildfly-common</name>
@@ -933,16 +726,12 @@
          <artifactId>wildfly-common</artifactId>
          <version>1.5.2.Final</version>
          <projectUrl>http://www.jboss.org/wildfly-common</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License 2.0</name>
                <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/wildfly/common/wildfly-common/1.5.2.Final/wildfly-common-1.5.2.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>XNIO API</name>
@@ -950,16 +739,12 @@
          <artifactId>xnio-api</artifactId>
          <version>3.8.0.Final</version>
          <projectUrl>http://www.jboss.org/xnio</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License 2.0</name>
                <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/jboss/xnio/xnio-api/3.8.0.Final/xnio-api-3.8.0.Final.jar</string>
-         </downloadUrls>
       </dependency>
       <dependency>
          <name>XNIO NIO Implementation</name>
@@ -967,16 +752,12 @@
          <artifactId>xnio-nio</artifactId>
          <version>3.8.0.Final</version>
          <projectUrl>http://www.jboss.org/xnio-all/xnio-nio</projectUrl>
-         <type>jar</type>
          <licenses>
             <license>
                <name>Apache License 2.0</name>
                <url>http://repository.jboss.org/licenses/apache-2.0.txt</url>
             </license>
          </licenses>
-         <downloadUrls>
-            <string>https://repo.maven.apache.org/maven2/org/jboss/xnio/xnio-nio/3.8.0.Final/xnio-nio-3.8.0.Final.jar</string>
-         </downloadUrls>
       </dependency>
    </dependencies>
 </attributionReport>
