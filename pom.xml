@@ -76,7 +76,7 @@
         <powermock.version>2.0.9</powermock.version>
         <scribejava.version>8.3.1</scribejava.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <log4j.version>2.14.1</log4j.version>
+        <log4j.version>2.15.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
         <undertow.version>2.2.8.Final</undertow.version>
         <vavr.version>0.10.3</vavr.version>
