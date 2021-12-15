@@ -60,9 +60,9 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora.version>0.1-SNAPSHOT-1257676920-1-1db68bb</amphora.version>
-        <castor.version>0.1-SNAPSHOT-1257597392-1-6853da7</castor.version>
-        <ephemeral.version>0.1-SNAPSHOT-1257716526-1-5deb524</ephemeral.version>
+        <amphora.version>0.1-SNAPSHOT-1576737535-6-7798b9e</amphora.version>
+        <castor.version>0.1-SNAPSHOT-1576642733-7-72de814</castor.version>
+        <ephemeral.version>0.1-SNAPSHOT-1525401638-9-a0b5e7a</ephemeral.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
@@ -76,7 +76,7 @@
         <powermock.version>2.0.9</powermock.version>
         <scribejava.version>8.3.1</scribejava.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <log4j.version>2.15.0</log4j.version>
+        <log4j.version>2.16.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
         <undertow.version>2.2.8.Final</undertow.version>
         <vavr.version>0.10.3</vavr.version>
