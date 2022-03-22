@@ -96,6 +96,19 @@ Usage: cs [options] [command] [subcommand] [subcommand options] [parameter]
         get-secret      Retrieve an secret from Amphora
           Usage: get-secret [options] SECRET_ID
             Options:
+              -f, --tagfilter
+                Filter secrets based on their tags and the criteria provided.
+                When multiple filters are defined, they are joined via AND.
+                    Can be in one of the following formats:
+                        - key:value EQUAL Match
+                        - key>value GREATER THAN (Assumes tag value is a numeric value)
+                        - key<value LESS THAN (Assumes tag value is a numeric value)
+              -s, --sortBy
+                Sort output by given tag key.
+                    Format: <KEY>:[ASC|DESC]
+                    Examples:
+                        type:ASC
+                        creation-date:DESC
               -l, --list-ids-only
                 Output secret IDs only
 

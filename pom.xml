@@ -60,7 +60,7 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora.version>0.1-SNAPSHOT-1576737535-6-7798b9e</amphora.version>
+        <amphora.version>0.1-SNAPSHOT-2015679936-19-23fb768</amphora.version>
         <castor.version>0.1-SNAPSHOT-1576642733-7-72de814</castor.version>
         <ephemeral.version>0.1-SNAPSHOT-1525401638-9-a0b5e7a</ephemeral.version>
 
