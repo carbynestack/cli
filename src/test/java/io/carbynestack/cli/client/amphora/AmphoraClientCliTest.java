@@ -21,8 +21,11 @@ import io.carbynestack.amphora.client.AmphoraClient;
 import io.carbynestack.amphora.client.Secret;
 import io.carbynestack.amphora.common.Metadata;
 import io.carbynestack.amphora.common.Tag;
+import io.carbynestack.amphora.common.TagFilter;
+import io.carbynestack.amphora.common.TagFilterOperator;
 import io.carbynestack.amphora.common.exceptions.AmphoraClientException;
 import io.carbynestack.amphora.common.exceptions.SecretVerificationException;
+import io.carbynestack.amphora.common.paging.Sort;
 import io.carbynestack.cli.CsClientCli;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.client.amphora.command.config.*;
@@ -36,6 +39,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -384,7 +388,7 @@ public class AmphoraClientCliTest {
   public void listSuccessTest()
       throws CsCliException, CsCliRunnerException, AmphoraClientException, CsCliLoginException {
     List<Metadata> secretMetadataList = AmphoraTestData.getMetadataList();
-    when(amphoraClientMock.getSecrets()).thenReturn(secretMetadataList);
+    when(amphoraClientMock.getSecrets(emptyList(), (Sort) null)).thenReturn(secretMetadataList);
     getCliWithArgs(ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME).parse();
     Assert.assertThat(
         systemOutRule.getLog(),
@@ -395,7 +399,8 @@ public class AmphoraClientCliTest {
   public void testListSecretsFailed()
       throws CsCliException, AmphoraClientException, CsCliLoginException {
     String errorMsg = "Sth went wrong";
-    when(amphoraClientMock.getSecrets()).thenThrow(new AmphoraClientException(errorMsg));
+    when(amphoraClientMock.getSecrets(emptyList(), (Sort) null))
+        .thenThrow(new AmphoraClientException(errorMsg));
     try {
       getCliWithArgs(ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME).parse();
       fail("Exception expected");
@@ -408,11 +413,129 @@ public class AmphoraClientCliTest {
   public void listWithIdsOnlySuccessTest()
       throws CsCliException, CsCliRunnerException, AmphoraClientException, CsCliLoginException {
     List<Metadata> secretMetadataList = AmphoraTestData.getMetadataList();
-    when(amphoraClientMock.getSecrets()).thenReturn(secretMetadataList);
+    when(amphoraClientMock.getSecrets(emptyList(), (Sort) null)).thenReturn(secretMetadataList);
     getCliWithArgs(ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME, "-l").parse();
     Assert.assertThat(
         systemOutRule.getLog(),
         containsString(SecretPrinter.metadataListToString(secretMetadataList, true)));
+  }
+
+  @Test
+  public void givenInvalidTagFilterString_whenListSecrets_thenExceptionIsThrown() {
+    String invalidTagFilterString = "key=";
+
+    CsCliRunnerException actualCCRE =
+        assertThrows(
+            CsCliRunnerException.class,
+            () ->
+                getCliWithArgs(
+                        ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+                        "-l",
+                        "-f",
+                        invalidTagFilterString)
+                    .parse());
+    assertEquals(
+        MessageFormat.format(
+            amphoraMessages.getString("list.failure.invalid-tag-filter"), invalidTagFilterString),
+        actualCCRE.getMessage());
+  }
+
+  @Test
+  public void givenEmptyTagFilterString_whenListSecrets_thenExceptionIsThrown() {
+    String emptyTagFilterString = "";
+
+    CsCliRunnerException actualCCRE =
+        assertThrows(
+            CsCliRunnerException.class,
+            () ->
+                getCliWithArgs(
+                        ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+                        "-l",
+                        "-f",
+                        emptyTagFilterString)
+                    .parse());
+    assertEquals(
+        MessageFormat.format(
+            amphoraMessages.getString("list.failure.invalid-tag-filter"), emptyTagFilterString),
+        actualCCRE.getMessage());
+  }
+
+  @Test
+  public void givenValidTagFilters_whenListSecrets_thenCallClientWithExpectedArguments()
+      throws AmphoraClientException, CsCliRunnerException, CsCliLoginException, CsCliException {
+    TagFilter expectedTagFilter1 = TagFilter.with("time", "42", TagFilterOperator.LESS_THAN);
+    TagFilter expectedTagFilter2 = TagFilter.with("type", "temperature", TagFilterOperator.EQUALS);
+
+    getCliWithArgs(
+            ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+            "-l",
+            "-f",
+            tagFilterToString(expectedTagFilter1),
+            "-f",
+            tagFilterToString(expectedTagFilter2))
+        .parse();
+
+    ArgumentCaptor<ArrayList> listArgumentCaptor = ArgumentCaptor.forClass(ArrayList.class);
+    verify(amphoraClientMock, times(1)).getSecrets(listArgumentCaptor.capture(), eq((Sort) null));
+    assertEquals(
+        Arrays.asList(expectedTagFilter1, expectedTagFilter2), listArgumentCaptor.getValue());
+  }
+
+  @Test
+  public void givenInvalidSortConfig_whenListSecrets_thenExceptionIsThrown() {
+    String invalidSortString = "key:DOWN";
+
+    CsCliRunnerException actualCCRE =
+        assertThrows(
+            CsCliRunnerException.class,
+            () ->
+                getCliWithArgs(
+                        ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+                        "-l",
+                        "-s",
+                        invalidSortString)
+                    .parse());
+    assertEquals(
+        MessageFormat.format(
+            amphoraMessages.getString("list.failure.invalid-sort-format"), invalidSortString),
+        actualCCRE.getMessage());
+  }
+
+  @Test
+  public void givenEmptySortConfig_whenListSecrets_thenExceptionIsThrown() {
+    String emptySortString = "";
+
+    CsCliRunnerException actualCCRE =
+        assertThrows(
+            CsCliRunnerException.class,
+            () ->
+                getCliWithArgs(
+                        ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+                        "-l",
+                        "-s",
+                        emptySortString)
+                    .parse());
+    assertEquals(
+        MessageFormat.format(
+            amphoraMessages.getString("list.failure.invalid-sort-format"), emptySortString),
+        actualCCRE.getMessage());
+  }
+
+  @Test
+  public void givenValidSortConfig_whenListSecrets_thenCallClientWithExpectedArguments()
+      throws AmphoraClientException, CsCliRunnerException, CsCliLoginException, CsCliException {
+    Sort expectedSortConfig = Sort.by("time", Sort.Order.ASC);
+
+    getCliWithArgs(
+            ListSecretsAmphoraClientCliCommandConfig.COMMAND_NAME,
+            "-l",
+            "-s",
+            String.format("%s:%s", expectedSortConfig.getProperty(), expectedSortConfig.getOrder()))
+        .parse();
+
+    ArgumentCaptor<Sort> sortArgumentCaptor = ArgumentCaptor.forClass(Sort.class);
+    verify(amphoraClientMock, times(1)).getSecrets(anyList(), sortArgumentCaptor.capture());
+    assertEquals(expectedSortConfig, sortArgumentCaptor.getValue());
   }
 
   @Test
@@ -723,5 +846,10 @@ public class AmphoraClientCliTest {
     } catch (CsCliRunnerException scre) {
       Assert.assertThat(scre.getMessage(), containsString(errorMsg));
     }
+  }
+
+  private String tagFilterToString(TagFilter tagFilter) {
+    return String.format(
+        "%s%s%s", tagFilter.getKey(), tagFilter.getOperator(), tagFilter.getValue());
   }
 }

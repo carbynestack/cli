@@ -13,6 +13,8 @@ import com.beust.jcommander.Parameters;
 import io.carbynestack.cli.client.amphora.AmphoraClientFactory;
 import io.carbynestack.cli.client.amphora.config.AmphoraClientCliCommandConfig;
 import io.vavr.control.Option;
+import java.util.Collections;
+import java.util.List;
 import lombok.Getter;
 
 @Parameters(
@@ -27,6 +29,20 @@ public class ListSecretsAmphoraClientCliCommandConfig extends AmphoraClientCliCo
       descriptionKey = "list.option.ids-only")
   private boolean idsOnly;
 
+  @Getter
+  @Parameter(
+      names = {"-f", "--tagfilter"},
+      descriptionKey = "list.option.tag-filter-description",
+      order = 2)
+  private List<String> tagFilters;
+
+  @Getter
+  @Parameter(
+      names = {"-s", "--sortBy"},
+      descriptionKey = "list.option.sort-by-description",
+      order = 3)
+  private String sortBy;
+
   public ListSecretsAmphoraClientCliCommandConfig(
       Option<AmphoraClientFactory> customClientFactory) {
     super(customClientFactory);
@@ -35,5 +51,9 @@ public class ListSecretsAmphoraClientCliCommandConfig extends AmphoraClientCliCo
   @Override
   public String getCommandName() {
     return COMMAND_NAME;
+  }
+
+  public List<String> getTagFilters() {
+    return tagFilters != null ? tagFilters : Collections.emptyList();
   }
 }
