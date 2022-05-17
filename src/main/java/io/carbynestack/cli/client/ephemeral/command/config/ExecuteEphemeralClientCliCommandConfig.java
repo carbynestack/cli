@@ -34,6 +34,12 @@ public class ExecuteEphemeralClientCliCommandConfig extends EphemeralClientCliCo
       order = 1)
   private List<UUID> inputs = Lists.newArrayList();
 
+  @Parameter(
+      names = {"-f", "--tagfilter"},
+      descriptionKey = "execute.option.tag-filter-description",
+      order = 2)
+  private List<String> tagFilters = Lists.newArrayList();
+
   @Override
   public String getCommandName() {
     return COMMAND_NAME;

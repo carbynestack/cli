@@ -154,6 +154,31 @@ public class EphemeralClientCliTest {
   }
 
   @Test
+  public void
+      givenBothTagFiltersAndInputsProvided_whenUsingEphemeralClient_thenExceptionWithCorrectMessageIsThrows()
+          throws CsCliLoginException, CsCliException {
+    String uuid = UUID.randomUUID().toString();
+    String tagFilter = "key:value";
+
+    try {
+      getCliWithArgs(
+              ExecuteEphemeralClientCliCommandConfig.COMMAND_NAME,
+              "-i",
+              uuid,
+              "-f",
+              tagFilter,
+              "app.example.com")
+          .parse();
+      Assert.fail("Expected Exception");
+    } catch (CsCliRunnerException e) {
+      Assert.assertThat(
+          e.getMessage(),
+          CoreMatchers.containsString(
+              EPHEMERAL_CLI_MESSAGES.getString("execute.failure.both-inputs-provided")));
+    }
+  }
+
+  @Test
   public void givenUnreachableEphemeralUris_whenParsing_thenExceptionIsThrown()
       throws CsCliException, CsCliLoginException {
     System.setIn(new ReaderInputStream(new StringReader("a = sint(1)"), StandardCharsets.UTF_8));
@@ -189,6 +214,32 @@ public class EphemeralClientCliTest {
             application)
         .parse();
     verify(client).execute(eq(code), eq(inputs));
+    Assert.assertThat(
+        systemOutRule.getLog(),
+        CoreMatchers.containsString(Arrays.toString(results.get(0).getResponse().toArray())));
+  }
+
+  @Test
+  public void
+      givenAllRequiredArgumentsWithTagFilter_whenParsing_thenCallTheClientWithCorrectArguments()
+          throws Exception {
+    String code = "a = sint(1)";
+    String application = "app.svc.example.com";
+    String tagFilter = "key:value";
+    List<String> tagFilters = Collections.singletonList(tagFilter);
+
+    UUID outputId = UUID.randomUUID();
+    List<ActivationResult> results =
+        Lists.newArrayList(
+            new ActivationResult(Collections.singletonList(outputId)),
+            new ActivationResult(Collections.singletonList(outputId)));
+    when(client.executeWithTags(eq(code), eq(tagFilters)))
+        .thenReturn(Future.successful(Either.right(results)));
+    System.setIn(new ReaderInputStream(new StringReader(code), StandardCharsets.UTF_8));
+    getCliWithArgs(
+            true, ExecuteEphemeralClientCliCommandConfig.COMMAND_NAME, "-f", tagFilter, application)
+        .parse();
+    verify(client).executeWithTags(eq(code), eq(tagFilters));
     Assert.assertThat(
         systemOutRule.getLog(),
         CoreMatchers.containsString(Arrays.toString(results.get(0).getResponse().toArray())));

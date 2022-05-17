@@ -12,6 +12,7 @@ import io.carbynestack.cli.exceptions.CsCliConfigurationException;
 import io.carbynestack.cli.exceptions.CsCliRunnerException;
 import io.carbynestack.ephemeral.client.ActivationError;
 import io.carbynestack.ephemeral.client.ActivationResult;
+import io.vavr.concurrent.Future;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import java.nio.charset.StandardCharsets;
@@ -42,15 +43,29 @@ public class ExecuteEphemeralClientCliCommandRunner
   public void run() throws CsCliRunnerException {
     System.out.println("Provide program to execute. Press Ctrl+D to submit.");
     ExecuteEphemeralClientCliCommandConfig c = this.getConfig();
+
+    // Both input options provided
+    if (c.getTagFilters().size() != 0 && c.getInputs().size() != 0) {
+      throw new CsCliRunnerException(
+          getMessages().getString("execute.failure.both-inputs-provided"));
+    }
+
     String code =
         readCodeFromStdIn()
             .getOrElseThrow(
                 e ->
                     new CsCliRunnerException(
                         getMessages().getString("execute.failure.read-code"), e));
+
+    Future<Either<ActivationError, List<ActivationResult>>> execute;
+    if (c.getTagFilters().size() != 0) {
+      execute = client.executeWithTags(code, c.getTagFilters());
+    } else {
+      execute = client.execute(code, c.getInputs());
+    }
+
     Either<ActivationError, List<ActivationResult>> result =
-        client
-            .execute(code, c.getInputs())
+        execute
             .toTry()
             .getOrElseThrow(
                 t ->
