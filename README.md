@@ -18,6 +18,19 @@ This is a CLI tool to communicate with the Carbyne Stack services.
 > possible, this version of the CLI is considered legacy and will no longer be
 > maintained.
 
+> **IMPORTANT**: Since Version `0.2-SNAPSHOT-...`, the CLI expects tuples in the
+> format used by MP-SPDZ v0.2 and later. This means that Tuple files from
+> earlier builds will no longer work.
+>
+> See [here](https://github.com/carbynestack/carbynestack/tree/master/tuples)
+> for information on how tuple-files can be generated.\
+> The pre-generated Tuple
+> files for Version 0.1 can be found
+> [here](https://github.com/carbynestack/carbynestack/tree/master/tuples/fake-crypto-material-0.1.zip)\
+> The
+> pre-generated Tuple files for Version 0.2 can be found
+> [here](https://github.com/carbynestack/carbynestack/tree/master/tuples/fake-crypto-material-0.2.zip)
+
 ## Configuration
 
 Prior to the first use of the Carbyne Stack CLI it is required to run the

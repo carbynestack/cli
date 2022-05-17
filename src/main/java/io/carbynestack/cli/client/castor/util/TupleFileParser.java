@@ -13,6 +13,8 @@ import io.carbynestack.castor.common.entities.TupleType;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,12 +37,40 @@ public class TupleFileParser {
 
     byte[] bytes;
     try (FileInputStream fileInputStream = new FileInputStream(tupleFile)) {
-      bytes = toByteArray(fileInputStream);
+      bytes = getTuplesWithoutHeader(fileInputStream);
     } catch (IOException e) {
       log.error(String.format("Cannot read file %s", tupleFile.getPath()));
       throw new RuntimeException();
     }
 
     return TupleChunk.of(tupleType.getTupleCls(), tupleType.getField(), chunkId, bytes);
+  }
+
+  /**
+   * Removes the File Header that was introduced in MP-SPDZ v0.2.8
+   *
+   * @param tupleStreamWithHeader The file inputstream that includes the header
+   * @return The file bytes shifted by the header
+   */
+  private static byte[] getTuplesWithoutHeader(FileInputStream tupleStreamWithHeader)
+      throws IOException {
+    long spdzHeaderLength = getSpdzHeaderLength(tupleStreamWithHeader);
+    long skipedLength = tupleStreamWithHeader.skip(spdzHeaderLength);
+
+    if (spdzHeaderLength != skipedLength) {
+      throw new IOException("can not skip mp-spdz headers!");
+    }
+    return toByteArray(tupleStreamWithHeader);
+  }
+
+  private static long getSpdzHeaderLength(FileInputStream tupleStreamWithHeader)
+      throws IOException {
+    // See https://github.com/data61/MP-SPDZ/issues/418#issuecomment-975424591 for header
+    // Starts with LongEndian 8 Byte Number depicting the header length, followed by [headerLength]
+    // bytes
+    // TODO: It would be possible to check the prime here, so that no incorrect values are uploaded,
+    //  but Castor has no access to it.
+    byte[] headerLengthBytes = toByteArray(tupleStreamWithHeader, 8);
+    return ByteBuffer.wrap(headerLengthBytes).order(ByteOrder.LITTLE_ENDIAN).getLong();
   }
 }
