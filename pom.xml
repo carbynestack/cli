@@ -78,7 +78,7 @@
         <slf4j.version>1.7.30</slf4j.version>
         <log4j.version>2.16.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
-        <undertow.version>2.2.8.Final</undertow.version>
+        <undertow.version>2.2.18.Final</undertow.version>
         <vavr.version>0.10.3</vavr.version>
         <wiremock.version>2.26.3</wiremock.version>
     </properties>
