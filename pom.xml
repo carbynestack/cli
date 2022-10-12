@@ -74,7 +74,7 @@
         <lombok.version>1.18.20</lombok.version>
         <mockito.version>3.9.0</mockito.version>
         <powermock.version>2.0.9</powermock.version>
-        <scribejava.version>8.3.1</scribejava.version>
+        <scribejava.version>8.3.2</scribejava.version>
         <slf4j.version>1.7.30</slf4j.version>
         <log4j.version>2.16.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
