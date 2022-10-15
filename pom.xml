@@ -66,7 +66,7 @@
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
-        <apache.commons.text.version>1.9</apache.commons.text.version>
+        <apache.commons.text.version>1.10.0</apache.commons.text.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jackson.version>2.12.3</jackson.version>
         <jcommander.version>1.72</jcommander.version>
