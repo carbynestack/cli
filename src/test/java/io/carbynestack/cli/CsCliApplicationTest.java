@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -34,7 +34,9 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.hamcrest.CoreMatchers;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
@@ -55,12 +57,9 @@ public class CsCliApplicationTest {
 
   @Rule public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
 
-  @Mock ConfigurationCommand configurationCommand = mock(ConfigurationCommand.class);
+  @Rule public final LoggingRule loggingRule = new LoggingRule();
 
-  @Before
-  public void prepareCleanTest() {
-    LogUtils.clearLogs();
-  }
+  @Mock ConfigurationCommand configurationCommand = mock(ConfigurationCommand.class);
 
   private final ConfigurationCommandFactory configurationCommandFactory =
       () -> configurationCommand;
@@ -165,8 +164,7 @@ public class CsCliApplicationTest {
   public void mainInvalidCommandTest() {
     exit.expectSystemExitWithStatus(1);
     exit.checkAssertionAfterwards(
-        () ->
-            assertThat(LogUtils.getLog("WARNINGS"), CoreMatchers.startsWith("No command defined")));
+        () -> assertThat(loggingRule.getLog(), CoreMatchers.startsWith("No command defined")));
     exit.checkAssertionAfterwards(
         () ->
             assertThat(
@@ -180,13 +178,12 @@ public class CsCliApplicationTest {
     exit.expectSystemExitWithStatus(2);
     exit.checkAssertionAfterwards(
         () ->
-            assertThat(
-                LogUtils.getLog("STDERR"), CoreMatchers.startsWith("Unexpected error occurred")));
+            assertThat(loggingRule.getLog(), CoreMatchers.startsWith("Unexpected error occurred")));
     exit.checkAssertionAfterwards(
         () ->
             assertThat(
-                LogUtils.getLog("STDERR"),
-                CoreMatchers.containsString(
+                loggingRule.getLog(),
+                containsString(
                     String.format(
                         "Usage: %s %s", APPLICATION_TITLE, AmphoraClientCliConfig.CLIENT_NAME))));
     getCsCliApplication(true).main(AmphoraClientCliConfig.CLIENT_NAME);
@@ -209,9 +206,7 @@ public class CsCliApplicationTest {
     exit.expectSystemExitWithStatus(4);
     exit.checkAssertionAfterwards(
         () ->
-            assertThat(
-                LogUtils.getLog("STDERR"),
-                CoreMatchers.containsString("Configuration file does not exist")));
+            assertThat(loggingRule.getLog(), containsString("Configuration file does not exist")));
     getCsCliApplication(true).main("--config-file", "/nonexistent.file", COMMAND_NAME);
   }
 
@@ -220,10 +215,7 @@ public class CsCliApplicationTest {
     File invalidAccessTokens = File.createTempFile("empty-access-tokens", ".json");
     exit.expectSystemExitWithStatus(5);
     exit.checkAssertionAfterwards(
-        () ->
-            assertThat(
-                LogUtils.getLog("STDERR"),
-                CoreMatchers.containsString("reading token store failed")));
+        () -> assertThat(loggingRule.getLog(), containsString("reading token store failed")));
     getCsCliApplication(true)
         .main(
             "--config-file",

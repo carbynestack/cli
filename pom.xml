@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2021 - for information on the respective copyright owner
+  ~ Copyright (c) 2023 - for information on the respective copyright owner
   ~ see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
   ~
   ~ SPDX-License-Identifier: Apache-2.0
@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cli</artifactId>
     <groupId>io.carbynestack</groupId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <name>Carbyne Stack Command Line Interface</name>
     <description>Carbyne Stack Command Line Interface for interacting with backend services.</description>
     <licenses>
@@ -47,7 +47,7 @@
         <skip.tests>false</skip.tests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
 
         <!-- Plugin versions -->
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -60,26 +60,27 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora.version>0.1-SNAPSHOT-2015679936-19-23fb768</amphora.version>
-        <castor.version>0.1-SNAPSHOT-1576642733-7-72de814</castor.version>
-        <ephemeral.version>0.1-SNAPSHOT-1525401638-9-a0b5e7a</ephemeral.version>
+        <amphora.version>0.1-SNAPSHOT-3541990771-21-ef4f222</amphora.version>
+        <castor.version>0.1-SNAPSHOT-4191841095-22-1721229</castor.version>
+        <ephemeral.version>0.1-SNAPSHOT-2804677120-20-efc7f8d</ephemeral.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
         <apache.commons.text.version>1.9</apache.commons.text.version>
         <hamcrest.version>2.2</hamcrest.version>
-        <jackson.version>2.12.3</jackson.version>
+        <jackson.version>2.14.1</jackson.version>
         <jcommander.version>1.72</jcommander.version>
         <junit.version>4.13.2</junit.version>
-        <lombok.version>1.18.20</lombok.version>
-        <mockito.version>3.9.0</mockito.version>
+        <lombok.version>1.18.24</lombok.version>
+        <mockito.version>3.11.2</mockito.version>
         <powermock.version>2.0.9</powermock.version>
+        <reload4j.version>1.2.24</reload4j.version>
         <scribejava.version>8.3.1</scribejava.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <slf4j.version>2.0.6</slf4j.version>
         <log4j.version>2.16.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
         <undertow.version>2.2.8.Final</undertow.version>
-        <vavr.version>0.10.3</vavr.version>
+        <vavr.version>0.10.4</vavr.version>
         <wiremock.version>2.26.3</wiremock.version>
     </properties>
     <dependencies>
@@ -123,6 +124,11 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>${jackson.version}</version>
         </dependency>
@@ -156,20 +162,16 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/ch.qos.reload4j/reload4j -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>ch.qos.reload4j</groupId>
+            <artifactId>reload4j</artifactId>
+            <version>${reload4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-reload4j</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <!-- test dependencies -->
@@ -219,13 +221,6 @@
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
             <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
     </dependencies>

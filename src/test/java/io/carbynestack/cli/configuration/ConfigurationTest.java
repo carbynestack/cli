@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -7,14 +7,14 @@
 package io.carbynestack.cli.configuration;
 
 import static io.carbynestack.cli.configuration.Configuration.*;
-import static io.carbynestack.cli.configuration.ConfigurationCommand.*;
+import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
 import io.carbynestack.cli.CsCliApplication;
 import io.carbynestack.cli.CsCliApplicationTest;
-import io.carbynestack.cli.LogUtils;
+import io.carbynestack.cli.LoggingRule;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
 import io.carbynestack.cli.exceptions.CsCliException;
 import io.carbynestack.cli.exceptions.CsCliRunnerException;
@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
@@ -36,6 +39,7 @@ public class ConfigurationTest {
 
   @Rule public TemporaryFolder temporaryFolder = new TemporaryFolder();
   @Rule public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
+  @Rule public final LoggingRule loggingRule = new LoggingRule();
 
   @Mock private final ConfigurationCommand configurationCommand = mock(ConfigurationCommand.class);
 
@@ -46,7 +50,6 @@ public class ConfigurationTest {
 
   @Before
   public void prepareCleanTest() throws CsCliConfigurationException {
-    LogUtils.clearLogs();
     doAnswer(invocation -> loadFromFile()).when(configurationCommand).configure();
     csCliApplication =
         CsCliApplicationTest.getCsCliApplication(Option.some(configurationCommandFactory));
@@ -77,7 +80,7 @@ public class ConfigurationTest {
     File tempFile = temporaryFolder.newFile();
     csCliApplication.run("--config-file", tempFile.getAbsolutePath(), "configure");
     Assert.assertThat(
-        LogUtils.getLog("STDERR"),
+        loggingRule.getLog(),
         containsString(MESSAGES.getString("read-config.failure.cannot-be-parsed")));
   }
 
@@ -90,7 +93,7 @@ public class ConfigurationTest {
     tempFile.setReadable(false);
     csCliApplication.run("--config-file", tempFile.getAbsolutePath(), "configure");
     Assert.assertThat(
-        LogUtils.getLog("STDERR"),
+        loggingRule.getLog(),
         containsString(MESSAGES.getString("read-config.failure.cannot-be-read")));
   }
 
@@ -101,8 +104,7 @@ public class ConfigurationTest {
     String configFile = String.format("/%s", RandomStringUtils.random(10));
     csCliApplication.run("--config-file", configFile, "configure");
     Assert.assertThat(
-        LogUtils.getLog("STDERR"),
-        containsString(MESSAGES.getString("read-config.log.does-not-exist")));
+        loggingRule.getLog(), containsString(MESSAGES.getString("read-config.log.does-not-exist")));
   }
 
   @Test
@@ -111,9 +113,9 @@ public class ConfigurationTest {
           CsCliException {
     setConfigFilePath(null);
     csCliApplication.run("configure");
-    Assert.assertThat(LogUtils.getLog("STDERR"), containsString("Using config file"));
+    Assert.assertThat(loggingRule.getLog(), containsString("Using config file"));
     Assert.assertThat(
-        LogUtils.getLog("STDERR"),
+        loggingRule.getLog(),
         containsString(
             Paths.get(System.getProperty("user.home"), CONFIG_FOLDER_PATH, CONFIG_FILE_NAME)
                 .toString()));

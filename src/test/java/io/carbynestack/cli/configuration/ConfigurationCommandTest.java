@@ -1,19 +1,19 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 package io.carbynestack.cli.configuration;
 
-import static io.carbynestack.cli.configuration.ConfigurationCommand.*;
+import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.fail;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.carbynestack.cli.LogUtils;
+import io.carbynestack.cli.LoggingRule;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,10 @@ import java.text.MessageFormat;
 import java.util.Random;
 import java.util.ResourceBundle;
 import org.apache.commons.io.FileUtils;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemErrRule;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
@@ -41,13 +44,14 @@ public class ConfigurationCommandTest {
 
   @Rule public final SystemErrRule systemErrRule = new SystemErrRule().enableLog();
 
+  @Rule public final LoggingRule loggingRule = new LoggingRule();
+
   private File configFile;
 
   private ConfigurationCommand configurationCommand = new ConfigurationCommand();
 
   @Before
   public void prepareCleanTest() throws IOException {
-    LogUtils.clearLogs();
     configFile = temporaryFolder.newFile();
     Configuration.setConfigFilePath(configFile.toPath());
   }
@@ -110,8 +114,7 @@ public class ConfigurationCommandTest {
       fail("Exception expected");
     } catch (Exception e) {
       Assert.assertThat(
-          LogUtils.getLog("STDERR"),
-          containsString(MESSAGES.getString("read-config.log.fallback")));
+          loggingRule.getLog(), containsString(MESSAGES.getString("read-config.log.fallback")));
     }
   }
 }
