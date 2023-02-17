@@ -4,7 +4,7 @@
          <name>amphora-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-common</artifactId>
-         <version>0.1-SNAPSHOT-2015679936-19-23fb768</version>
+         <version>0.1-SNAPSHOT-3541990771-21-ef4f222</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -16,7 +16,7 @@
          <name>amphora-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-java-client</artifactId>
-         <version>0.1-SNAPSHOT-2015679936-19-23fb768</version>
+         <version>0.1-SNAPSHOT-3541990771-21-ef4f222</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -93,8 +93,8 @@
          <name>Apache HttpClient</name>
          <groupId>org.apache.httpcomponents</groupId>
          <artifactId>httpclient</artifactId>
-         <version>4.5.13</version>
-         <projectUrl>http://hc.apache.org/httpcomponents-client</projectUrl>
+         <version>4.5.14</version>
+         <projectUrl>http://hc.apache.org/httpcomponents-client-ga</projectUrl>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>
@@ -106,7 +106,7 @@
          <name>Apache HttpCore</name>
          <groupId>org.apache.httpcomponents</groupId>
          <artifactId>httpcore</artifactId>
-         <version>4.4.13</version>
+         <version>4.4.16</version>
          <projectUrl>http://hc.apache.org/httpcomponents-core-ga</projectUrl>
          <licenses>
             <license>
@@ -116,49 +116,10 @@
          </licenses>
       </dependency>
       <dependency>
-         <name>Apache Log4j API</name>
-         <groupId>org.apache.logging.log4j</groupId>
-         <artifactId>log4j-api</artifactId>
-         <version>2.16.0</version>
-         <projectUrl>https://logging.apache.org/log4j/2.x/log4j-api/</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
-         <name>Apache Log4j Core</name>
-         <groupId>org.apache.logging.log4j</groupId>
-         <artifactId>log4j-core</artifactId>
-         <version>2.16.0</version>
-         <projectUrl>https://logging.apache.org/log4j/2.x/log4j-core/</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
-         <name>Apache Log4j SLF4J Binding</name>
-         <groupId>org.apache.logging.log4j</groupId>
-         <artifactId>log4j-slf4j-impl</artifactId>
-         <version>2.16.0</version>
-         <projectUrl>https://logging.apache.org/log4j/2.x/log4j-slf4j-impl/</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
          <name>Carbyne Stack Ephemeral Java Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>ephemeral-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1525401638-9-a0b5e7a</version>
+         <version>0.1-SNAPSHOT-2804677120-20-efc7f8d</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -194,7 +155,7 @@
          <name>castor-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-common</artifactId>
-         <version>0.1-SNAPSHOT-1576642733-7-72de814</version>
+         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -206,7 +167,7 @@
          <name>castor-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1576642733-7-72de814</version>
+         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -218,7 +179,7 @@
          <name>castor-upload-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-upload-java-client</artifactId>
-         <version>0.1-SNAPSHOT-1576642733-7-72de814</version>
+         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -321,12 +282,12 @@
          <name>Jackson-annotations</name>
          <groupId>com.fasterxml.jackson.core</groupId>
          <artifactId>jackson-annotations</artifactId>
-         <version>2.10.2</version>
-         <projectUrl>http://github.com/FasterXML/jackson</projectUrl>
+         <version>2.14.1</version>
+         <projectUrl>https://github.com/FasterXML/jackson</projectUrl>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
-               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
       </dependency>
@@ -334,12 +295,12 @@
          <name>Jackson-core</name>
          <groupId>com.fasterxml.jackson.core</groupId>
          <artifactId>jackson-core</artifactId>
-         <version>2.12.3</version>
+         <version>2.14.1</version>
          <projectUrl>https://github.com/FasterXML/jackson-core</projectUrl>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
-               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
       </dependency>
@@ -347,12 +308,12 @@
          <name>jackson-databind</name>
          <groupId>com.fasterxml.jackson.core</groupId>
          <artifactId>jackson-databind</artifactId>
-         <version>2.10.2</version>
-         <projectUrl>http://github.com/FasterXML/jackson</projectUrl>
+         <version>2.14.1</version>
+         <projectUrl>https://github.com/FasterXML/jackson</projectUrl>
          <licenses>
             <license>
                <name>The Apache Software License, Version 2.0</name>
-               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
       </dependency>
@@ -399,7 +360,7 @@
          <name>JUL to SLF4J bridge</name>
          <groupId>org.slf4j</groupId>
          <artifactId>jul-to-slf4j</artifactId>
-         <version>1.7.30</version>
+         <version>2.0.6</version>
          <projectUrl>http://www.slf4j.org</projectUrl>
          <licenses>
             <license>
@@ -412,12 +373,25 @@
          <name>Project Lombok</name>
          <groupId>org.projectlombok</groupId>
          <artifactId>lombok</artifactId>
-         <version>1.18.20</version>
+         <version>1.18.24</version>
          <projectUrl>https://projectlombok.org</projectUrl>
          <licenses>
             <license>
                <name>The MIT License</name>
                <url>https://projectlombok.org/LICENSE</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>reload4j</name>
+         <groupId>ch.qos.reload4j</groupId>
+         <artifactId>reload4j</artifactId>
+         <version>1.2.24</version>
+         <projectUrl>https://reload4j.qos.ch</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
       </dependency>
@@ -464,8 +438,21 @@
          <name>SLF4J API Module</name>
          <groupId>org.slf4j</groupId>
          <artifactId>slf4j-api</artifactId>
-         <version>1.7.30</version>
+         <version>2.0.6</version>
          <projectUrl>http://www.slf4j.org</projectUrl>
+         <licenses>
+            <license>
+               <name>MIT License</name>
+               <url>http://www.opensource.org/licenses/mit-license.php</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>SLF4J Reload4j Binding</name>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-reload4j</artifactId>
+         <version>2.0.6</version>
+         <projectUrl>http://reload4j.qos.ch</projectUrl>
          <licenses>
             <license>
                <name>MIT License</name>
@@ -477,7 +464,7 @@
          <name>Spring AOP</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-aop</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -490,7 +477,7 @@
          <name>Spring Beans</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-beans</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -503,7 +490,7 @@
          <name>Spring Commons Logging Bridge</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-jcl</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -516,7 +503,7 @@
          <name>Spring Context</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-context</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -529,7 +516,7 @@
          <name>Spring Core</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-core</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -542,7 +529,7 @@
          <name>Spring Expression Language (SpEL)</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-expression</artifactId>
-         <version>5.2.1.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -555,7 +542,7 @@
          <name>Spring Messaging</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-messaging</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -568,7 +555,7 @@
          <name>Spring Retry</name>
          <groupId>org.springframework.retry</groupId>
          <artifactId>spring-retry</artifactId>
-         <version>1.2.5.RELEASE</version>
+         <version>1.3.3</version>
          <projectUrl>https://www.springsource.org</projectUrl>
          <licenses>
             <license>
@@ -581,7 +568,7 @@
          <name>Spring Web</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-web</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -594,7 +581,7 @@
          <name>Spring WebSocket</name>
          <groupId>org.springframework</groupId>
          <artifactId>spring-websocket</artifactId>
-         <version>5.2.3.RELEASE</version>
+         <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
          <licenses>
             <license>
@@ -607,12 +594,25 @@
          <name>spring-security-core</name>
          <groupId>org.springframework.security</groupId>
          <artifactId>spring-security-core</artifactId>
-         <version>5.2.1.RELEASE</version>
-         <projectUrl>http://spring.io/spring-security</projectUrl>
+         <version>5.5.8</version>
+         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
          <licenses>
             <license>
-               <name>The Apache Software License, Version 2.0</name>
-               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>spring-security-crypto</name>
+         <groupId>org.springframework.security</groupId>
+         <artifactId>spring-security-crypto</artifactId>
+         <version>5.5.8</version>
+         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
       </dependency>
@@ -620,12 +620,12 @@
          <name>spring-security-web</name>
          <groupId>org.springframework.security</groupId>
          <artifactId>spring-security-web</artifactId>
-         <version>5.2.1.RELEASE</version>
-         <projectUrl>http://spring.io/spring-security</projectUrl>
+         <version>5.5.8</version>
+         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
          <licenses>
             <license>
-               <name>The Apache Software License, Version 2.0</name>
-               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
             </license>
          </licenses>
       </dependency>
@@ -633,7 +633,7 @@
          <name>tomcat-annotations-api</name>
          <groupId>org.apache.tomcat</groupId>
          <artifactId>tomcat-annotations-api</artifactId>
-         <version>9.0.30</version>
+         <version>9.0.71</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
          <licenses>
             <license>
@@ -646,7 +646,7 @@
          <name>tomcat-embed-core</name>
          <groupId>org.apache.tomcat.embed</groupId>
          <artifactId>tomcat-embed-core</artifactId>
-         <version>9.0.30</version>
+         <version>9.0.71</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
          <licenses>
             <license>
@@ -659,7 +659,7 @@
          <name>tomcat-embed-websocket</name>
          <groupId>org.apache.tomcat.embed</groupId>
          <artifactId>tomcat-embed-websocket</artifactId>
-         <version>9.0.30</version>
+         <version>9.0.71</version>
          <projectUrl>https://tomcat.apache.org/</projectUrl>
          <licenses>
             <license>
@@ -685,7 +685,7 @@
          <name>Vavr</name>
          <groupId>io.vavr</groupId>
          <artifactId>vavr</artifactId>
-         <version>0.10.3</version>
+         <version>0.10.4</version>
          <projectUrl>http://vavr.io</projectUrl>
          <licenses>
             <license>
@@ -698,7 +698,7 @@
          <name>Vavr Match</name>
          <groupId>io.vavr</groupId>
          <artifactId>vavr-match</artifactId>
-         <version>0.10.3</version>
+         <version>0.10.4</version>
          <projectUrl>http://vavr.io</projectUrl>
          <licenses>
             <license>
