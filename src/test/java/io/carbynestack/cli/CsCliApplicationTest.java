@@ -183,7 +183,7 @@ public class CsCliApplicationTest {
         () ->
             assertThat(
                 loggingRule.getLog(),
-                CoreMatchers.containsString(
+                containsString(
                     String.format(
                         "Usage: %s %s", APPLICATION_TITLE, AmphoraClientCliConfig.CLIENT_NAME))));
     getCsCliApplication(true).main(AmphoraClientCliConfig.CLIENT_NAME);
@@ -206,9 +206,7 @@ public class CsCliApplicationTest {
     exit.expectSystemExitWithStatus(4);
     exit.checkAssertionAfterwards(
         () ->
-            assertThat(
-                loggingRule.getLog(),
-                CoreMatchers.containsString("Configuration file does not exist")));
+            assertThat(loggingRule.getLog(), containsString("Configuration file does not exist")));
     getCsCliApplication(true).main("--config-file", "/nonexistent.file", COMMAND_NAME);
   }
 
@@ -217,9 +215,7 @@ public class CsCliApplicationTest {
     File invalidAccessTokens = File.createTempFile("empty-access-tokens", ".json");
     exit.expectSystemExitWithStatus(5);
     exit.checkAssertionAfterwards(
-        () ->
-            assertThat(
-                loggingRule.getLog(), CoreMatchers.containsString("reading token store failed")));
+        () -> assertThat(loggingRule.getLog(), containsString("reading token store failed")));
     getCsCliApplication(true)
         .main(
             "--config-file",

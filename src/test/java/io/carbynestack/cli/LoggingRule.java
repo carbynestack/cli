@@ -56,7 +56,9 @@ public class LoggingRule extends ExternalResource {
     }
 
     @Override
-    public void close() {}
+    public void close() {
+      // nothing to close
+    }
 
     @Override
     public boolean requiresLayout() {
