@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -17,6 +17,8 @@ public abstract class CsClientCliConfig {
     return args == null ? new String[0] : args.toArray(new String[args.size()]);
   }
 
-  /** @return Carbyne Stack Service name */
+  /**
+   * @return Carbyne Stack Service name
+   */
   public abstract String getClientName();
 }

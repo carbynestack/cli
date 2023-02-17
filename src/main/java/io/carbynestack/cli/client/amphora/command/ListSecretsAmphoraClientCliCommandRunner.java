@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -59,7 +59,9 @@ public class ListSecretsAmphoraClientCliCommandRunner
     return tagFilters;
   }
 
-  /** @throws CsCliRunnerException if given sort config cannot be parsed */
+  /**
+   * @throws CsCliRunnerException if given sort config cannot be parsed
+   */
   private Sort getSorting() throws CsCliRunnerException {
     Sort sort = null;
     if (getConfig().getSortBy() != null) {
