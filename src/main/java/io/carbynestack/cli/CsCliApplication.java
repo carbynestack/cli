@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -36,10 +36,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 @Slf4j
 public class CsCliApplication {
@@ -84,11 +82,7 @@ public class CsCliApplication {
     }
 
     if (csCliConfig.isDebug()) {
-      LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-      org.apache.logging.log4j.core.config.Configuration config = ctx.getConfiguration();
-      LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-      loggerConfig.setLevel(Level.DEBUG);
-      ctx.updateLoggers();
+      Logger.getRootLogger().setLevel(Level.DEBUG);
     }
 
     if (parsedCommand == null) {
