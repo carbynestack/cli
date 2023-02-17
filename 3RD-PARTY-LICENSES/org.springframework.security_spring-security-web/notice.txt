@@ -16,5 +16,5 @@
    "SpringSource", "Acegi", "Acegi Security", "Acegi Security System",
    "Acegi" or any derivatives thereof may not be used to endorse or
    promote products derived from this software without prior written
-   permission. For written permission, please contact 
+   permission. For written permission, please contact
    ben.alex@springsource.com.
