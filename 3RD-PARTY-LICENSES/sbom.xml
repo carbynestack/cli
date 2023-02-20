@@ -4,7 +4,7 @@
          <name>amphora-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-common</artifactId>
-         <version>0.1-SNAPSHOT-3541990771-21-ef4f222</version>
+         <version>0.1-SNAPSHOT-4205214333-22-2fa009a</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -16,7 +16,7 @@
          <name>amphora-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-java-client</artifactId>
-         <version>0.1-SNAPSHOT-3541990771-21-ef4f222</version>
+         <version>0.1-SNAPSHOT-4205214333-22-2fa009a</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -80,7 +80,7 @@
          <name>Apache Commons Text</name>
          <groupId>org.apache.commons</groupId>
          <artifactId>commons-text</artifactId>
-         <version>1.9</version>
+         <version>1.10.0</version>
          <projectUrl>https://commons.apache.org/proper/commons-text</projectUrl>
          <licenses>
             <license>
@@ -131,7 +131,7 @@
          <name>Carbyne Stack Java HTTP Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>java-http-client</artifactId>
-         <version>0.1-SNAPSHOT-1257534854-1-46815a7</version>
+         <version>0.1-SNAPSHOT-4075044562-9-8ffab9c</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -143,7 +143,7 @@
          <name>Carbyne Stack MP-SPDZ Integration Utilities</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>mp-spdz-integration</artifactId>
-         <version>0.1-SNAPSHOT-1257545971-1-d751c28</version>
+         <version>0.2-SNAPSHOT-3541842672-11-c754bbb</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
