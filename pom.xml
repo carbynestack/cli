@@ -60,13 +60,13 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora.version>0.1-SNAPSHOT-3541990771-21-ef4f222</amphora.version>
+        <amphora.version>0.1-SNAPSHOT-4205214333-22-2fa009a</amphora.version>
         <castor.version>0.1-SNAPSHOT-4191841095-22-1721229</castor.version>
         <ephemeral.version>0.1-SNAPSHOT-2804677120-20-efc7f8d</ephemeral.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
-        <apache.commons.text.version>1.9</apache.commons.text.version>
+        <apache.commons.text.version>1.10.0</apache.commons.text.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jackson.version>2.14.1</jackson.version>
         <jcommander.version>1.72</jcommander.version>
