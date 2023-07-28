@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cli</artifactId>
     <groupId>io.carbynestack</groupId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3.0</version>
     <name>Carbyne Stack Command Line Interface</name>
     <description>Carbyne Stack Command Line Interface for interacting with backend services.</description>
     <licenses>
@@ -60,9 +60,11 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora.version>0.1-SNAPSHOT-4205214333-22-2fa009a</amphora.version>
-        <castor.version>0.1-SNAPSHOT-4191841095-22-1721229</castor.version>
-        <ephemeral.version>0.1-SNAPSHOT-2804677120-20-efc7f8d</ephemeral.version>
+        <amphora-java-client.version>0.1-SNAPSHOT-4205214333-22-2fa009a</amphora-java-client.version>
+        <castor-common.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-common.version>
+        <castor-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-java-client.version>
+        <castor-upload-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-upload-java-client.version>
+        <ephemeral-java-client.version>0.1-SNAPSHOT-2804677120-20-efc7f8d</ephemeral-java-client.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
@@ -88,27 +90,27 @@
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>amphora-java-client</artifactId>
-            <version>${amphora.version}</version>
+            <version>${amphora-java-client.version}</version>
         </dependency>
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>castor-common</artifactId>
-            <version>${castor.version}</version>
+            <version>${castor-common.version}</version>
         </dependency>
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>castor-java-client</artifactId>
-            <version>${castor.version}</version>
+            <version>${castor-java-client.version}</version>
         </dependency>
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>castor-upload-java-client</artifactId>
-            <version>${castor.version}</version>
+            <version>${castor-upload-java-client.version}</version>
         </dependency>
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>ephemeral-java-client</artifactId>
-            <version>${ephemeral.version}</version>
+            <version>${ephemeral-java-client.version}</version>
         </dependency>
 
         <!-- External dependencies -->
