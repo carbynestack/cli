@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/carbynestack/cli/compare/cli-v0.3.1...cli-v0.4.0) (2023-08-01)
+
+
+### Features
+
+* upgrade amphora to enable secure tuple provisioning ([#36](https://github.com/carbynestack/cli/issues/36)) ([ef3c90f](https://github.com/carbynestack/cli/commit/ef3c90f4d96c4e78081ab3236b3c95516dbdb7ec))
+
 ## [0.3.1](https://github.com/carbynestack/cli/compare/cli-v0.3.0...cli-v0.3.1) (2023-07-28)
 
 
