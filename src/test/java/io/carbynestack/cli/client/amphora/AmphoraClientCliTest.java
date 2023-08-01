@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -24,7 +24,7 @@ import io.carbynestack.amphora.common.Tag;
 import io.carbynestack.amphora.common.TagFilter;
 import io.carbynestack.amphora.common.TagFilterOperator;
 import io.carbynestack.amphora.common.exceptions.AmphoraClientException;
-import io.carbynestack.amphora.common.exceptions.SecretVerificationException;
+import io.carbynestack.amphora.common.exceptions.IntegrityVerificationException;
 import io.carbynestack.amphora.common.paging.Sort;
 import io.carbynestack.cli.CsClientCli;
 import io.carbynestack.cli.TemporaryConfiguration;
@@ -151,8 +151,7 @@ public class AmphoraClientCliTest {
 
   @Test(expected = CsCliRunnerException.class)
   public void downloadFailedTest()
-      throws CsCliException, CsCliRunnerException, AmphoraClientException,
-          SecretVerificationException, CsCliLoginException {
+      throws CsCliException, CsCliRunnerException, AmphoraClientException, CsCliLoginException {
     when(amphoraClientMock.getSecret(any(UUID.class))).thenThrow(new AmphoraClientException(""));
     getCliWithArgs(
             GetSecretAmphoraClientCliCommandConfig.COMMAND_NAME, UUID.randomUUID().toString())
@@ -329,8 +328,8 @@ public class AmphoraClientCliTest {
   @SneakyThrows
   @Test
   public void downloadSecretVerificationFails() {
-    SecretVerificationException expectedCause =
-        new SecretVerificationException("Verification failed.");
+    IntegrityVerificationException expectedCause =
+        new IntegrityVerificationException("Verification failed.");
     Secret expectedSecret =
         Secret.of(
             UUID.randomUUID(),
@@ -351,8 +350,7 @@ public class AmphoraClientCliTest {
 
   @Test
   public void downloadLargeSecretSuccessTest()
-      throws CsCliException, CsCliRunnerException, AmphoraClientException,
-          SecretVerificationException, CsCliLoginException {
+      throws CsCliException, CsCliRunnerException, AmphoraClientException, CsCliLoginException {
     Secret expectedSecret =
         Secret.of(
             UUID.randomUUID(),
@@ -368,8 +366,7 @@ public class AmphoraClientCliTest {
 
   @Test
   public void downloadSuccessWithTagsTest()
-      throws CsCliException, CsCliRunnerException, AmphoraClientException,
-          SecretVerificationException, CsCliLoginException {
+      throws CsCliException, CsCliRunnerException, AmphoraClientException, CsCliLoginException {
     Secret expectedSecret =
         Secret.of(
             UUID.randomUUID(),

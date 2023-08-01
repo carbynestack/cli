@@ -58,7 +58,7 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora-java-client.version>0.1-SNAPSHOT-4205214333-22-2fa009a</amphora-java-client.version>
+        <amphora-java-client.version>0.1.1</amphora-java-client.version>
         <castor-common.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-common.version>
         <castor-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-java-client.version>
         <castor-upload-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-upload-java-client.version>

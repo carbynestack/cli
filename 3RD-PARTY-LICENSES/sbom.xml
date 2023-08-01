@@ -4,7 +4,7 @@
          <name>amphora-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-common</artifactId>
-         <version>0.1-SNAPSHOT-4205214333-22-2fa009a</version>
+         <version>0.1.1</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -16,7 +16,7 @@
          <name>amphora-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-java-client</artifactId>
-         <version>0.1-SNAPSHOT-4205214333-22-2fa009a</version>
+         <version>0.1.1</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -99,6 +99,32 @@
             <license>
                <name>Apache License, Version 2.0</name>
                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Apache HttpComponents Core HTTP/1.1</name>
+         <groupId>org.apache.httpcomponents.core5</groupId>
+         <artifactId>httpcore5</artifactId>
+         <version>5.2</version>
+         <projectUrl>https://hc.apache.org/httpcomponents-core-5.2.x/5.2/httpcore5/</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Apache HttpComponents Core HTTP/2</name>
+         <groupId>org.apache.httpcomponents.core5</groupId>
+         <artifactId>httpcore5-h2</artifactId>
+         <version>5.2</version>
+         <projectUrl>https://hc.apache.org/httpcomponents-core-5.2.x/5.2/httpcore5-h2/</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
             </license>
          </licenses>
       </dependency>
