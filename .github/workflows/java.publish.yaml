@@ -18,6 +18,7 @@ jobs:
       - name: Retrieve license obligation resources
         id: license-obligations
         run: |
+          mkdir -p license-obligations
           cd 3RD-PARTY-LICENSES
           FILES=$(find . -maxdepth 1 -type d -not -path .)
           if [ -n "$FILES" ]
@@ -29,25 +30,11 @@ jobs:
           split($0,b,"/"); \
           system("xargs < " $0 " curl --create-dirs -Lo ./sources/" b[2] ".zip " $2)}' && \
           find -regex './sources$' | awk '{system("zip -jr ./3rd-party-sources.zip " $0)}'
-          mkdir -p ../license-obligations
           ARCHIVES=$(find . -regex "^./3rd-party-.*.zip$")
-          OBLIGATIONS_FOUND="false"
           if [ -n "$ARCHIVES" ]
           then
             mv $(echo "${ARCHIVES}") ../license-obligations/
-            OBLIGATIONS_FOUND="true"
           fi
-          echo "OBLIGATIONS_FOUND=${OBLIGATIONS_FOUND}" >> $GITHUB_OUTPUT
-      - name: Update Release with license obligations resources
-        uses: ncipollo/release-action@v1
-        if: steps.license-obligations.outputs.OBLIGATIONS_FOUND == 'true'
-        with:
-          allowUpdates: true
-          artifacts: license-obligations/*
-          artifactErrorsFailBuild: true
-          makeLatest: true
-          omitBodyDuringUpdate: true
-          omitNameDuringUpdate: true
       - name: Setup java
         uses: actions/setup-java@v3
         with:
@@ -64,5 +51,18 @@ jobs:
               "username": "${{ secrets.GHPR_USERNAME }}",
               "password": "${{ secrets.GHPR_TOKEN }}"
             }]
+      - name: Build artifact
+        run: |
+          mvn package -Dskip.tests --batch-mode --no-transfer-progress &&
+          cp target/cli-${GITHUB_REF#refs/*/cli-v}-jar-with-dependencies.jar cli-${GITHUB_REF#refs/*/cli-v}.jar
+      - name: Update Release with license obligations resources
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          artifacts: license-obligations/*,cli-${GITHUB_REF#refs/*/cli-v}.jar
+          artifactErrorsFailBuild: true
+          makeLatest: true
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
       - name: Publish version to GitHub Packages
         run: mvn deploy -Dskip.tests --batch-mode --no-transfer-progress
