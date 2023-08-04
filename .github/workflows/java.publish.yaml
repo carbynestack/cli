@@ -15,10 +15,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Create release artifacts folder
+        run: mkdir -p release-artifacts
       - name: Retrieve license obligation resources
         id: license-obligations
         run: |
-          mkdir -p license-obligations
           cd 3RD-PARTY-LICENSES
           FILES=$(find . -maxdepth 1 -type d -not -path .)
           if [ -n "$FILES" ]
@@ -33,7 +34,7 @@ jobs:
           ARCHIVES=$(find . -regex "^./3rd-party-.*.zip$")
           if [ -n "$ARCHIVES" ]
           then
-            mv $(echo "${ARCHIVES}") ../license-obligations/
+            mv $(echo "${ARCHIVES}") ../release-artifacts/
           fi
       - name: Setup java
         uses: actions/setup-java@v3
@@ -54,12 +55,12 @@ jobs:
       - name: Build artifact
         run: |
           mvn package -Dskip.tests --batch-mode --no-transfer-progress &&
-          cp target/cli-${GITHUB_REF#refs/*/cli-v}-jar-with-dependencies.jar cli-${GITHUB_REF#refs/*/cli-v}.jar
+          cp target/cli-${GITHUB_REF#refs/*/cli-v}-jar-with-dependencies.jar release-artifacts/cli-${GITHUB_REF#refs/*/cli-v}.jar
       - name: Update Release with license obligations resources
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: license-obligations/*,cli-${GITHUB_REF#refs/*/cli-v}.jar
+          artifacts: release-artifacts/*
           artifactErrorsFailBuild: true
           makeLatest: true
           omitBodyDuringUpdate: true
