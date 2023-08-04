@@ -6,6 +6,14 @@
 ### Bug Fixes
 
 * attach cli artifact to release ([#38](https://github.com/carbynestack/cli/issues/38)) ([50aa988](https://github.com/carbynestack/cli/commit/50aa9880c30b724cad17470aa28e24be776adf5c))
+* fix release-action pattern resolve issue ([#40](https://github.com/carbynestack/cli/issues/40)) ([c66ffd9](https://github.com/carbynestack/cli/commit/c66ffd945ea70b57e264764a68336561dca82877))
+
+## [0.4.1](https://github.com/carbynestack/cli/compare/cli-v0.4.0...cli-v0.4.1) (2023-08-04)
+
+
+### Bug Fixes
+
+* attach cli artifact to release ([#38](https://github.com/carbynestack/cli/issues/38)) ([50aa988](https://github.com/carbynestack/cli/commit/50aa9880c30b724cad17470aa28e24be776adf5c))
 
 ## [0.4.0](https://github.com/carbynestack/cli/compare/cli-v0.3.1...cli-v0.4.0) (2023-08-01)
 
