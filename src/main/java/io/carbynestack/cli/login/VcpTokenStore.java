@@ -15,8 +15,13 @@ import com.github.scribejava.apis.MicrosoftAzureActiveDirectory20Api;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.common.collect.Lists;
+import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.id.ClientID;
+import com.nimbusds.oauth2.sdk.token.RefreshToken;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.VcpConfiguration;
+import io.carbynestack.cli.exceptions.CsCliRunnerException;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -201,13 +206,34 @@ public class VcpTokenStore {
               Date expiration = token.getExpires();
               Duration stillValidFor = Duration.between(Instant.now(), expiration.toInstant());
               if (stillValidFor.toHours() < 1) {
+
                 log.debug("refreshing token for VCP with base URL {}", token.getVcpBaseUrl());
                 OAuth20Service oAuth20Service = getOAuth20ServiceProvider().apply(c);
                 return Try.of(
-                        () ->
-                            oAuth20Service.refreshAccessToken(
-                                token.getRefreshToken(),
-                                String.format("api://%s/Cs.Generic", c.getOAuth2ClientId())))
+                        () -> {
+                          ClientID clientID = new ClientID(c.getOAuth2ClientId());
+                          RefreshToken receivedRefreshToken =
+                              new RefreshToken(token.getRefreshToken());
+                          AuthorizationGrant refreshTokenGrant =
+                              new RefreshTokenGrant(receivedRefreshToken);
+                          URI tokenEndpoint = c.getOauth2TokenEndpointUri();
+
+                          Scope authScope = new Scope();
+                          authScope.add("offline");
+                          authScope.add("openid");
+
+                          TokenRequest request =
+                              new TokenRequest(
+                                  tokenEndpoint, clientID, refreshTokenGrant, authScope);
+                          var oidcTokenResponse =
+                              OIDCTokenResponse.parse(request.toHTTPRequest().send());
+                          if (oidcTokenResponse.indicatesSuccess()) {
+                            return oidcTokenResponse.toSuccessResponse().getOIDCTokens();
+                          } else {
+                            throw new CsCliRunnerException(
+                                oidcTokenResponse.toErrorResponse().getErrorObject().toString());
+                          }
+                        })
                     .onFailure(
                         t ->
                             log.error(

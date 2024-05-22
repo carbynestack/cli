@@ -28,6 +28,8 @@ public class VcpConfiguration {
   static final String AMPHORA_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_AMPHORA_URL";
   static final String CASTOR_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_CASTOR_URL";
   static final String EPHEMERAL_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_EPHEMERAL_URL";
+  static final String OAUTH2_AUTH_ENDPOINT_URI = "CS_VCP_{0}_OAUTH2_AUTH_ENDPOINT_URI";
+  static final String OAUTH2_TOKEN_ENDPOINT_URI = "CS_VCP_{0}_OAUTH2_TOKEN_ENDPOINT_URI";
   static final String OAUTH2_CLIENT_ID_ENV_KEY_FORMAT = "CS_VCP_{0}_OAUTH2_CLIENT_ID";
   static final String OAUTH2_CALLBACK_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_OAUTH2_CALLBACK_URL";
   static final String AMPHORA_URL_FORMAT = "{0}amphora";
@@ -45,6 +47,8 @@ public class VcpConfiguration {
   CastorServiceUri castorServiceUri;
   URI ephemeralServiceUrl;
   String oAuth2clientId;
+  URI oAuth2AuthEndpointUri;
+  URI oAuth2TokenEndpointUri;
   URI oAuth2CallbackUrl;
 
   VcpConfiguration(int providerNumber) {
@@ -88,6 +92,20 @@ public class VcpConfiguration {
                   MESSAGES.getString("configuration.request.vcp.oauth2-client-id"),
                   getActualOAuth2ClientId())));
       oAuth2clientId = readOrDefault(getActualOAuth2ClientId());
+      System.out.print(
+          String.format(
+              "\t%s",
+              MessageFormat.format(
+                  MESSAGES.getString("configuration.request.vcp.oauth2-auth-endpoint-uri"),
+                  getOauth2AuthEndpointUri())));
+      oAuth2AuthEndpointUri = URI.create(readOrDefault(getActualOauth2AuthEndpointUri()));
+      System.out.print(
+          String.format(
+              "\t%s",
+              MessageFormat.format(
+                  MESSAGES.getString("configuration.request.vcp.oauth2-token-endpoint-uri"),
+                  getOauth2AuthEndpointUri())));
+      oAuth2TokenEndpointUri = URI.create(readOrDefault(getActualOauth2TokenEndpointUri()));
       System.out.print(
           String.format(
               "\t%s",
@@ -185,12 +203,12 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
-  private String getActualOAuth2ClientId() {
+  public String getActualOAuth2ClientId() {
     return oAuth2clientId != null ? oAuth2clientId : "";
   }
 
   @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
-  private void setOAuth2ClientId(String oAuth2ClientId) {
+  public void setOAuth2ClientId(String oAuth2ClientId) {
     this.oAuth2clientId = oAuth2ClientId;
   }
 
@@ -210,6 +228,38 @@ public class VcpConfiguration {
   @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 16)
   private void setOAuth2CallbackUrl(String oAuth2CallbackUrl) {
     this.oAuth2CallbackUrl = URI.create(oAuth2CallbackUrl);
+  }
+
+  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
+  private String getActualOauth2AuthEndpointUri() {
+    return oAuth2AuthEndpointUri != null ? oAuth2AuthEndpointUri.toString() : "";
+  }
+
+  public URI getOauth2AuthEndpointUri() {
+    return System.getenv(MessageFormat.format(OAUTH2_AUTH_ENDPOINT_URI, providerNumber)) != null
+        ? URI.create(System.getenv(MessageFormat.format(OAUTH2_AUTH_ENDPOINT_URI, providerNumber)))
+        : oAuth2AuthEndpointUri;
+  }
+
+  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
+  private void setOauth2AuthEndpointUri(String oAuth2AuthEndpointUri) {
+    this.oAuth2AuthEndpointUri = URI.create(oAuth2AuthEndpointUri);
+  }
+
+  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 18)
+  private String getActualOauth2TokenEndpointUri() {
+    return oAuth2TokenEndpointUri != null ? oAuth2TokenEndpointUri.toString() : "";
+  }
+
+  public URI getOauth2TokenEndpointUri() {
+    return System.getenv(MessageFormat.format(OAUTH2_TOKEN_ENDPOINT_URI, providerNumber)) != null
+        ? URI.create(System.getenv(MessageFormat.format(OAUTH2_TOKEN_ENDPOINT_URI, providerNumber)))
+        : oAuth2TokenEndpointUri;
+  }
+
+  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 18)
+  private void setOauth2TokenEndpointUri(String oAuth2TokenEndpointUri) {
+    this.oAuth2TokenEndpointUri = URI.create(oAuth2TokenEndpointUri);
   }
 
   @Override

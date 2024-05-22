@@ -62,7 +62,9 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10))).when(callbackServer).getCode();
+    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+        .when(callbackServer)
+        .getAuthorizationCode();
     LoginCommand command =
         new LoginCommand(
             DEFAULT_CALLBACK_PORTS, (cfg, url) -> oAuth20Service, cfg -> callbackServer);
@@ -83,7 +85,9 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.some(NOT_SUPPORTED));
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10))).when(callbackServer).getCode();
+    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+        .when(callbackServer)
+        .getAuthorizationCode();
     LoginCommand command =
         new LoginCommand(
             DEFAULT_CALLBACK_PORTS, (cfg, url) -> oAuth20Service, cfg -> callbackServer);
@@ -101,7 +105,9 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10))).when(callbackServer).getCode();
+    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+        .when(callbackServer)
+        .getAuthorizationCode();
     AtomicInteger attempt = new AtomicInteger(0);
     int rounds = 5;
     LoginCommand command =
@@ -125,7 +131,9 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10))).when(callbackServer).getCode();
+    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+        .when(callbackServer)
+        .getAuthorizationCode();
     int basePort = 32768;
     Range<Integer> portRange = Range.between(basePort, basePort + 7);
     AtomicInteger attempts = new AtomicInteger(0);
@@ -156,7 +164,9 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10))).when(callbackServer).getCode();
+    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+        .when(callbackServer)
+        .getAuthorizationCode();
     LoginCommand command =
         new LoginCommand(
             DEFAULT_CALLBACK_PORTS,

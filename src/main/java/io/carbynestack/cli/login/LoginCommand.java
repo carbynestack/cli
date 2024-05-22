@@ -10,9 +10,16 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.github.scribejava.apis.MicrosoftAzureActiveDirectory20Api;
 import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.oauth.AccessTokenRequestParams;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.common.collect.Lists;
+import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.http.HTTPRequest;
+import com.nimbusds.oauth2.sdk.id.ClientID;
+import com.nimbusds.oauth2.sdk.id.State;
+import com.nimbusds.openid.connect.sdk.AuthenticationRequest;
+import com.nimbusds.openid.connect.sdk.Nonce;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponseParser;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.VcpConfiguration;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
@@ -24,7 +31,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Range;
@@ -68,7 +74,8 @@ public class LoginCommand {
 
   private final Range<Integer> callbackPortRange;
   private final BiFunction<VcpConfiguration, URI, OAuth20Service> oAuth20ServiceProvider;
-  private final Function<URI, OAuth2AuthenticationCodeCallbackHttpServer> callbackServerProvider;
+  private final BiFunction<URI, State, OAuth2AuthenticationCodeCallbackHttpServer>
+      callbackServerProvider;
 
   public LoginCommand() {
     this(
@@ -78,15 +85,15 @@ public class LoginCommand {
                 .defaultScope(String.join(" ", SCOPES))
                 .callback(callbackUrl.toString())
                 .build(MicrosoftAzureActiveDirectory20Api.custom(TENANT_ID)),
-        url ->
+        (url, state) ->
             new OAuth2AuthenticationCodeCallbackHttpServer(
-                url, AUTHENTICATION_CODE_TIMEOUT_MILLISECONDS));
+                url, state, AUTHENTICATION_CODE_TIMEOUT_MILLISECONDS));
   }
 
   LoginCommand(
       Range<Integer> callbackPortRange,
       BiFunction<VcpConfiguration, URI, OAuth20Service> oAuth20ServiceProvider,
-      Function<URI, OAuth2AuthenticationCodeCallbackHttpServer> callbackServerProvider) {
+      BiFunction<URI, State, OAuth2AuthenticationCodeCallbackHttpServer> callbackServerProvider) {
     this.callbackPortRange = callbackPortRange;
     this.oAuth20ServiceProvider = oAuth20ServiceProvider;
     this.callbackServerProvider = callbackServerProvider;
@@ -116,31 +123,54 @@ public class LoginCommand {
                         .setPort(callbackPortCandidates.getMinimum())
                         .build())
             .getOrElseThrow(t -> new IllegalStateException(t));
-    OAuth20Service oAuth20Service = oAuth20ServiceProvider.apply(vcpConfiguration, callbackUrl);
+
     log.debug("launching callback server on local address {}", callbackUrl);
+
+    State state = new State(); // used to compare against the state in the callback for CSRF
     try (OAuth2AuthenticationCodeCallbackHttpServer server =
-        callbackServerProvider.apply(callbackUrl)) {
-      URI authorizationUrl = URI.create(oAuth20Service.getAuthorizationUrl());
-      Option<? extends AuthenticationError> failed = BrowserLauncher.browse(authorizationUrl);
+        callbackServerProvider.apply(callbackUrl, state)) {
+
+      ClientID clientID = new ClientID(vcpConfiguration.getOAuth2ClientId());
+      URI callback = vcpConfiguration.getOAuth2CallbackUrl();
+      Nonce nonce = new Nonce(); // used to compare against the nonce in the callback for CSRF
+
+      // Compose the OpenID authentication request (for the code flow)
+      AuthenticationRequest request =
+          new AuthenticationRequest.Builder(
+                  new ResponseType("code"), new Scope("openid", "offline"), clientID, callback)
+              .endpointURI(vcpConfiguration.getOauth2AuthEndpointUri())
+              .state(state)
+              .nonce(nonce)
+              .build();
+
+      Option<? extends AuthenticationError> failed = BrowserLauncher.browse(request.toURI());
       if (failed.isDefined()) {
         return Either.left(failed.get());
       }
+
       return server
-          .getCode()
+          .getAuthorizationCode()
           .map(
               code ->
                   Try.of(
-                      () ->
-                          oAuth20Service.getAccessToken(
-                              AccessTokenRequestParams.create(code)
-                                  .scope(
-                                      String.format(
-                                          "api://%s/Cs.Generic",
-                                          vcpConfiguration.getOAuth2ClientId())))))
-          .mapLeft(
-              e ->
-                  (AuthenticationError)
-                      e) // Required to help the compiler to get the types sorted out
+                      () -> {
+                        URI tokenEndpoint = vcpConfiguration.getOauth2TokenEndpointUri();
+                        AuthorizationGrant codeGrant = new AuthorizationCodeGrant(code, callback);
+
+                        Scope authScope = new Scope();
+                        authScope.add("offline");
+                        authScope.add("openid");
+
+                        TokenRequest tokenRequest =
+                            new TokenRequest(tokenEndpoint, clientID, codeGrant, authScope);
+                        HTTPRequest toHTTPRequest = tokenRequest.toHTTPRequest();
+                        TokenResponse tokenResponse =
+                            OIDCTokenResponseParser.parse(toHTTPRequest.send());
+                        OIDCTokenResponse successResponse =
+                            (OIDCTokenResponse) tokenResponse.toSuccessResponse();
+                        return successResponse.getOIDCTokens();
+                      }))
+          .mapLeft(e -> (AuthenticationError) e)
           .flatMap(
               t ->
                   t.onFailure(e -> log.error("getting access token failed unexpectedly", e))

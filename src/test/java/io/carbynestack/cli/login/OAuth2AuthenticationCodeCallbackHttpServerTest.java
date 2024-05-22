@@ -9,9 +9,9 @@ package io.carbynestack.cli.login;
 import static io.carbynestack.cli.login.OAuth2AuthenticationCodeCallbackHttpServer.*;
 import static io.carbynestack.cli.login.OAuth2AuthenticationCodeCallbackHttpServer.CallbackError.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
+import com.nimbusds.oauth2.sdk.token.AccessToken;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -43,7 +43,7 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
   public void givenCallbackIsNotCalled_whenGetCode_thenTimesOut() {
     try (OAuth2AuthenticationCodeCallbackHttpServer server =
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL, 1000)) {
-      Either<CallbackError, String> r = server.getCode();
+      Either<CallbackError, AccessToken> r = server.getAuthorizationCode();
       assertThat("getting code didn't fail", r.isLeft());
       assertEquals(
           "getting code did not time out when callback was not invoked", TIME_OUT, r.getLeft());
@@ -57,7 +57,7 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL)) {
       String code = RandomStringUtils.randomAlphanumeric(20);
       CompletableFuture<Try<HttpResponse>> f = invokeCallback(Option.some(code));
-      Either<CallbackError, String> r = server.getCode();
+      Either<CallbackError, AccessToken> r = server.getAuthorizationCode();
       assertThat("invoking callback failed", f.get().get().getStatusLine().getStatusCode() == 200);
       assertThat("getting code didn't succeed", r.isRight());
       assertEquals("incorrect code delivered", code, r.get());
@@ -70,7 +70,7 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
     try (OAuth2AuthenticationCodeCallbackHttpServer server =
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL)) {
       CompletableFuture<Try<HttpResponse>> f = invokeCallback(Option.none());
-      Either<CallbackError, String> r = server.getCode();
+      Either<CallbackError, AccessToken> r = server.getAuthorizationCode();
       assertThat("invoking callback failed", f.get().get().getStatusLine().getStatusCode() == 200);
       assertThat("getting code succeeded although it should fail", r.isLeft());
       assertEquals("incorrect code delivered", MISSING_AUTHENTICATION_CODE, r.left().get());
@@ -83,7 +83,7 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL)) {
       String code = RandomStringUtils.randomAlphanumeric(20);
       invokeCallback(Option.some(code));
-      server.getCode();
+      server.getAuthorizationCode();
       HttpResponse response = invokeCallback(Option.none()).get(1, TimeUnit.SECONDS).get();
       assertEquals("Expected internal server error", 500, response.getStatusLine().getStatusCode());
     }

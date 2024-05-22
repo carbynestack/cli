@@ -142,6 +142,32 @@
          </licenses>
       </dependency>
       <dependency>
+         <name>asm</name>
+         <groupId>org.ow2.asm</groupId>
+         <artifactId>asm</artifactId>
+         <version>7.0</version>
+         <projectUrl>http://asm.ow2.org/</projectUrl>
+         <licenses>
+            <license>
+               <name>BSD</name>
+               <url>http://asm.ow2.org/license.html</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>ASM based accessors helper used by json-smart</name>
+         <groupId>net.minidev</groupId>
+         <artifactId>accessors-smart</artifactId>
+         <version>2.5.1</version>
+         <projectUrl>https://urielch.github.io/</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
          <name>Carbyne Stack Ephemeral Java Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>ephemeral-java-client</artifactId>
@@ -370,6 +396,19 @@
          </licenses>
       </dependency>
       <dependency>
+         <name>JCIP Annotations under Apache License</name>
+         <groupId>com.github.stephenc.jcip</groupId>
+         <artifactId>jcip-annotations</artifactId>
+         <version>1.0-1</version>
+         <projectUrl>http://stephenc.github.com/jcip-annotations</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, Version 2.0</name>
+               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
          <name>jcommander</name>
          <groupId>com.beust</groupId>
          <artifactId>jcommander</artifactId>
@@ -383,6 +422,19 @@
          </licenses>
       </dependency>
       <dependency>
+         <name>JSON Small and Fast Parser</name>
+         <groupId>net.minidev</groupId>
+         <artifactId>json-smart</artifactId>
+         <version>2.5.1</version>
+         <projectUrl>https://urielch.github.io/</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
          <name>JUL to SLF4J bridge</name>
          <groupId>org.slf4j</groupId>
          <artifactId>jul-to-slf4j</artifactId>
@@ -392,6 +444,58 @@
             <license>
                <name>MIT License</name>
                <url>http://www.opensource.org/licenses/mit-license.php</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Nimbus Content Type</name>
+         <groupId>com.nimbusds</groupId>
+         <artifactId>content-type</artifactId>
+         <version>2.3</version>
+         <projectUrl>https://bitbucket.org/connect2id/nimbus-content-type</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Nimbus JOSE+JWT</name>
+         <groupId>com.nimbusds</groupId>
+         <artifactId>nimbus-jose-jwt</artifactId>
+         <version>9.39.1</version>
+         <projectUrl>https://bitbucket.org/connect2id/nimbus-jose-jwt</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Nimbus LangTag</name>
+         <groupId>com.nimbusds</groupId>
+         <artifactId>lang-tag</artifactId>
+         <version>1.7</version>
+         <projectUrl>https://bitbucket.org/connect2id/nimbus-language-tags</projectUrl>
+         <licenses>
+            <license>
+               <name>The Apache Software License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>OAuth 2.0 SDK with OpenID Connect extensions</name>
+         <groupId>com.nimbusds</groupId>
+         <artifactId>oauth2-oidc-sdk</artifactId>
+         <version>11.12</version>
+         <projectUrl>https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
             </license>
          </licenses>
       </dependency>
