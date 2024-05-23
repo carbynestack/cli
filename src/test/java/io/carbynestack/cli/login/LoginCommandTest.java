@@ -6,26 +6,11 @@
  */
 package io.carbynestack.cli.login;
 
-import static io.carbynestack.cli.login.BrowserLauncher.*;
-import static io.carbynestack.cli.login.BrowserLauncher.BrowserLaunchError.*;
-import static io.carbynestack.cli.login.LoginCommand.*;
-import static io.carbynestack.cli.login.VcpTokenStore.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.oauth.AccessTokenRequestParams;
-import com.github.scribejava.core.oauth.OAuth20Service;
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.util.TokenUtils;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import java.net.BindException;
-import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Range;
 import org.junit.Before;
@@ -37,6 +22,22 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.net.BindException;
+import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static io.carbynestack.cli.login.BrowserLauncher.BrowserLaunchError.NOT_SUPPORTED;
+import static io.carbynestack.cli.login.BrowserLauncher.browse;
+import static io.carbynestack.cli.login.LoginCommand.DEFAULT_CALLBACK_PORTS;
+import static io.carbynestack.cli.login.LoginCommand.LoginCommandError;
+import static io.carbynestack.cli.login.VcpTokenStore.VcpTokenStoreError;
+import static io.carbynestack.cli.login.VcpTokenStore.load;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BrowserLauncher.class})
 public class LoginCommandTest {
@@ -45,43 +46,39 @@ public class LoginCommandTest {
 
   @Rule public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
-  private OAuth20Service oAuth20Service;
-  private OAuth2AccessToken token;
+  private OIDCTokens oidcTokens;
 
   @Before
   public void configureMocks() throws Exception {
     PowerMockito.mockStatic(BrowserLauncher.class);
-    oAuth20Service = mock(OAuth20Service.class);
-    token = TokenUtils.createToken("test");
-    doReturn(token).when(oAuth20Service).getAccessToken(any(AccessTokenRequestParams.class));
+    oidcTokens = TokenUtils.createToken();
   }
 
   @Test
   public void whenLogin_thenStoreHasBeenCreated() throws Exception {
-    doReturn("http://authorize.test.com").when(oAuth20Service).getAuthorizationUrl();
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
     doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
         .when(callbackServer)
         .getAuthorizationCode();
+
     LoginCommand command =
         new LoginCommand(
-            DEFAULT_CALLBACK_PORTS, (cfg, url) -> oAuth20Service, cfg -> callbackServer);
+            DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer);
     command.login();
     Either<VcpTokenStoreError, VcpTokenStore> store = load(false);
     assertThat("store has not been created", store.isRight());
     for (VcpToken t : store.get().getTokens()) {
       assertEquals(
           "stored access token does not equal expected token",
-          token.getAccessToken(),
+          oidcTokens.getAccessToken(),
           t.getAccessToken());
     }
   }
 
   @Test
   public void givenLaunchingBrowserFails_whenLogin_thenThrows() throws Exception {
-    doReturn("http://authorize.test.com").when(oAuth20Service).getAuthorizationUrl();
     when(browse(any())).thenReturn(Option.some(NOT_SUPPORTED));
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
@@ -90,7 +87,7 @@ public class LoginCommandTest {
         .getAuthorizationCode();
     LoginCommand command =
         new LoginCommand(
-            DEFAULT_CALLBACK_PORTS, (cfg, url) -> oAuth20Service, cfg -> callbackServer);
+            DEFAULT_CALLBACK_PORTS, (cfg, state) -> callbackServer);
     try {
       command.login();
       fail("expected exception has not been thrown");
@@ -101,7 +98,6 @@ public class LoginCommandTest {
 
   @Test
   public void givenPortIsInUse_whenLogin_thenSucceedOnNextPort() throws Exception {
-    doReturn("http://authorize.test.com").when(oAuth20Service).getAuthorizationUrl();
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
@@ -113,8 +109,7 @@ public class LoginCommandTest {
     LoginCommand command =
         new LoginCommand(
             DEFAULT_CALLBACK_PORTS,
-            (cfg, url) -> oAuth20Service,
-            cfg -> {
+            (cfg, state) -> {
               if (attempt.getAndAdd(1) < rounds) {
                 throw new RuntimeException(new BindException());
               } else {
@@ -127,7 +122,6 @@ public class LoginCommandTest {
 
   @Test
   public void givenAllPortsAreInUse_whenLogin_thenThrow() throws Exception {
-    doReturn("http://authorize.test.com").when(oAuth20Service).getAuthorizationUrl();
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
@@ -140,8 +134,7 @@ public class LoginCommandTest {
     LoginCommand command =
         new LoginCommand(
             portRange,
-            (cfg, url) -> oAuth20Service,
-            cfg -> {
+            (cfg, state) -> {
               attempts.getAndIncrement();
               throw new RuntimeException(new BindException());
             });
@@ -160,7 +153,6 @@ public class LoginCommandTest {
   @Test
   public void givenRuntimeExceptionDuringCallbackServerCreation_whenLogin_thenThrow()
       throws Exception {
-    doReturn("http://authorize.test.com").when(oAuth20Service).getAuthorizationUrl();
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
@@ -170,8 +162,7 @@ public class LoginCommandTest {
     LoginCommand command =
         new LoginCommand(
             DEFAULT_CALLBACK_PORTS,
-            (cfg, url) -> oAuth20Service,
-            cfg -> {
+            (cfg, state) -> {
               throw new RuntimeException(new SocketException());
             });
     try {

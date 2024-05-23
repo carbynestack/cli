@@ -6,26 +6,12 @@
  */
 package io.carbynestack.cli.login;
 
-import static io.carbynestack.cli.login.VcpTokenStore.*;
-import static io.carbynestack.cli.login.VcpTokenStore.load;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-
-import com.github.scribejava.core.oauth.OAuth20Service;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.ConfigurationUtil;
 import io.carbynestack.cli.util.TokenUtils;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import java.io.IOException;
-import java.io.Writer;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.util.Date;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +19,19 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.Date;
+
+import static io.carbynestack.cli.login.VcpTokenStore.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Configuration.class)
@@ -47,10 +46,10 @@ public class VcpTokenStoreTest {
     return builder()
         .token(
             VcpToken.from(
-                ref, config.getProvider(1).getBaseUrl(), TokenUtils.createToken("apollo")))
+                ref, config.getProvider(1).getBaseUrl(), TokenUtils.createToken()))
         .token(
             VcpToken.from(
-                ref, config.getProvider(2).getBaseUrl(), TokenUtils.createToken("starbuck")))
+                ref, config.getProvider(2).getBaseUrl(), TokenUtils.createToken()))
         .build();
   }
 
@@ -95,25 +94,18 @@ public class VcpTokenStoreTest {
   public void givenValidTokens_whenRefresh_thenDoesNothing() throws Exception {
     PowerMockito.mockStatic(Configuration.class);
     when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    VcpTokenStore store =
-        createStore(false).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+    VcpTokenStore store = createStore(false).toBuilder().build();
     assertThat(
         "tokens in store are expired", store.getTokens().stream().noneMatch(VcpToken::isExpired));
     store.refresh();
-    verify(mockedService, times(0)).refreshAccessToken(any());
   }
 
   @Test
   public void givenExpiredTokens_whenRefresh_thenRefreshesTokens() throws Exception {
     PowerMockito.mockStatic(Configuration.class);
     when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    doReturn(TokenUtils.createToken("test"))
-        .when(mockedService)
-        .refreshAccessToken(any(), any(String.class));
-    VcpTokenStore store =
-        createStore(true).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+
+    VcpTokenStore store = createStore(true).toBuilder().build();
     assertThat(
         "tokens in store are not expired",
         store.getTokens().stream().allMatch(VcpToken::isExpired));
@@ -128,10 +120,8 @@ public class VcpTokenStoreTest {
   public void givenExpiredTokensAndFailingProvider_whenRefresh_thenRefreshFails() throws Exception {
     PowerMockito.mockStatic(Configuration.class);
     when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    doThrow(new IOException()).when(mockedService).refreshAccessToken(any(), any(String.class));
     VcpTokenStore store =
-        createStore(true).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+        createStore(true).toBuilder().build();
     Either<VcpTokenStoreError, VcpTokenStore> refreshed = store.refresh();
     assertThat("refresh succeeded despite failing provider", refreshed.isLeft());
     assertThat("wrong error returned", refreshed.getLeft() instanceof ByTokenError);

@@ -75,7 +75,6 @@
         <mockito.version>3.11.2</mockito.version>
         <powermock.version>2.0.9</powermock.version>
         <reload4j.version>1.2.24</reload4j.version>
-        <scribejava.version>8.3.1</scribejava.version>
         <slf4j.version>2.0.6</slf4j.version>
         <log4j.version>2.16.0</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
@@ -131,11 +130,6 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.scribejava</groupId>
-            <artifactId>scribejava-apis</artifactId>
-            <version>${scribejava.version}</version>
         </dependency>
         <dependency>
             <groupId>io.undertow</groupId>

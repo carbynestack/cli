@@ -6,7 +6,7 @@
  */
 package io.carbynestack.cli.util;
 
-import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -14,13 +14,7 @@ public class TokenUtils {
 
   public final int VALIDITY = 24 * 60 * 60;
 
-  public OAuth2AccessToken createToken(String tag) {
-    return new OAuth2AccessToken(
-        String.format("%s-access-token", tag),
-        String.format("%s-token-type", tag),
-        VALIDITY,
-        String.format("%s-refresh-token", tag),
-        String.format("%s-scope", tag),
-        String.format("%s-raw-response", tag));
+  public OIDCTokens createToken() {
+    return new OIDCTokens(null, null);
   }
 }
