@@ -72,8 +72,8 @@ public class LoginCommandTest {
     for (VcpToken t : store.get().getTokens()) {
       assertEquals(
           "stored access token does not equal expected token",
-          oidcTokens.getAccessToken(),
-          t.getAccessToken());
+          oidcTokens.getIDToken().toString(),
+          t.getIdToken());
     }
   }
 

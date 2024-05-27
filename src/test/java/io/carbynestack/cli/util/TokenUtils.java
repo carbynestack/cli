@@ -15,6 +15,6 @@ public class TokenUtils {
   public final int VALIDITY = 24 * 60 * 60;
 
   public OIDCTokens createToken() {
-    return new OIDCTokens(null, null);
+    return new OIDCTokens("", null, null);
   }
 }
