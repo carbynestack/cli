@@ -61,7 +61,7 @@ public abstract class AmphoraClientCliCommandRunner<T extends AmphoraClientCliCo
                                 map ->
                                     (BearerTokenProvider<AmphoraServiceUri>)
                                         amphoraServiceUri ->
-                                            map.get(amphoraServiceUri).getAccessToken())
+                                            map.get(amphoraServiceUri).getIdToken())
                             .map(amphoraClientBuilder::bearerTokenProvider);
                       }
                       KeyStoreUtil.tempKeyStoreForPems(configuration.getTrustedCertificates())

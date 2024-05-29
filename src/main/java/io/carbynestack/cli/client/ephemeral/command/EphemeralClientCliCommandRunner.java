@@ -54,7 +54,7 @@ abstract class EphemeralClientCliCommandRunner<T extends EphemeralClientCliComma
                           .withEndpoints(endpoints)
                           .withSslCertificateValidation(!configuration.isNoSslValidation());
                   tokens.forEach(
-                      t -> builder.withBearerTokenProvider(uri -> t.get(uri).getAccessToken()));
+                      t -> builder.withBearerTokenProvider(uri -> t.get(uri).getIdToken()));
                   KeyStoreUtil.tempKeyStoreForPems(configuration.getTrustedCertificates())
                       .peek(builder::withTrustedCertificate);
                   return builder.build();

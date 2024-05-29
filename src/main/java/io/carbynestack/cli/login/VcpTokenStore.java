@@ -66,7 +66,7 @@ public class VcpTokenStore {
                         .onFailure(t -> log.error("reading token store failed", t))
                         .toEither()
                         .mapLeft(t -> VcpTokenStoreErrors.READING_TOKEN_STORE_FAILED);
-        return refresh ? notRefreshedStore.flatMap(VcpTokenStore::refresh) : notRefreshedStore;
+        return refresh ? notRefreshedStore.flatMap(VcpTokenStore::refresh).peek(VcpTokenStore::persist) : notRefreshedStore;
     }
 
     public static boolean exists() {
