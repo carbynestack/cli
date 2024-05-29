@@ -8,10 +8,7 @@ package io.carbynestack.cli.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.nimbusds.oauth2.sdk.AuthorizationGrant;
-import com.nimbusds.oauth2.sdk.RefreshTokenGrant;
-import com.nimbusds.oauth2.sdk.Scope;
-import com.nimbusds.oauth2.sdk.TokenRequest;
+import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.token.RefreshToken;
 import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
@@ -86,7 +83,8 @@ public class VcpTokenStore {
         }
     }
 
-    private static TokenRequest refreshTokenRequest(VcpToken token, VcpConfiguration c) {
+    OIDCTokenResponse sendRefreshToken(VcpToken token, VcpConfiguration c) throws ParseException, IOException {
+
         ClientID clientID = new ClientID(c.getOAuth2ClientId());
         AuthorizationGrant refreshTokenGrant = new RefreshTokenGrant(new RefreshToken(token.getRefreshToken()));
         Scope authScope = new Scope("offline", "openid");
@@ -94,7 +92,8 @@ public class VcpTokenStore {
         TokenRequest request =
                 new TokenRequest(
                         c.getOauth2TokenEndpointUri(), clientID, refreshTokenGrant, authScope);
-        return request;
+        return OIDCTokenResponse.parse(request.toHTTPRequest().send());
+
     }
 
     public Either<VcpTokenStoreError, VcpTokenStore> persist(Writer w) {
@@ -171,8 +170,7 @@ public class VcpTokenStore {
                                 log.debug("refreshing token for VCP with base URL {}", token.getVcpBaseUrl());
                                 return Try.of(
                                                 () -> {
-                                                    TokenRequest request = refreshTokenRequest(token, c);
-                                                    var oidcTokenResponse = OIDCTokenResponse.parse(request.toHTTPRequest().send());
+                                                    var oidcTokenResponse = sendRefreshToken(token, c);
                                                     if (oidcTokenResponse.indicatesSuccess()) {
                                                         return oidcTokenResponse.toSuccessResponse().getOIDCTokens();
                                                     } else {

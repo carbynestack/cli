@@ -6,6 +6,8 @@
  */
 package io.carbynestack.cli.login;
 
+import com.nimbusds.oauth2.sdk.AuthorizationCode;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.util.TokenUtils;
@@ -18,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -59,20 +62,20 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+    doReturn(Either.right(new AuthorizationCode()))
         .when(callbackServer)
         .getAuthorizationCode();
 
-    LoginCommand command =
-        new LoginCommand(
-            DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer);
+    LoginCommand command = Mockito.spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
+    doReturn(new OIDCTokenResponse(oidcTokens)).when(command).sendTokenRequest(Mockito.any());
+
     command.login();
     Either<VcpTokenStoreError, VcpTokenStore> store = load(false);
     assertThat("store has not been created", store.isRight());
     for (VcpToken t : store.get().getTokens()) {
       assertEquals(
           "stored access token does not equal expected token",
-          oidcTokens.getAccessToken(),
+          oidcTokens.getAccessToken().getValue(),
           t.getAccessToken());
     }
   }
@@ -101,13 +104,13 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+    doReturn(Either.right(new AuthorizationCode()))
         .when(callbackServer)
         .getAuthorizationCode();
     AtomicInteger attempt = new AtomicInteger(0);
     int rounds = 5;
     LoginCommand command =
-        new LoginCommand(
+        Mockito.spy(new LoginCommand(
             DEFAULT_CALLBACK_PORTS,
             (cfg, state) -> {
               if (attempt.getAndAdd(1) < rounds) {
@@ -115,7 +118,9 @@ public class LoginCommandTest {
               } else {
                 return callbackServer;
               }
-            });
+            }));
+    doReturn(new OIDCTokenResponse(oidcTokens)).when(command).sendTokenRequest(Mockito.any());
+
     command.login();
     assertEquals("not enough attempts detected", rounds + 2, attempt.get());
   }

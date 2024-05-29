@@ -6,6 +6,8 @@
  */
 package io.carbynestack.cli.login;
 
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.ConfigurationUtil;
@@ -13,9 +15,11 @@ import io.carbynestack.cli.util.TokenUtils;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -34,10 +38,11 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Configuration.class)
+@PrepareForTest({Configuration.class, VcpTokenStore.class})
 public class VcpTokenStoreTest {
 
   @Rule TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
+  private OIDCTokens oidcTokens;
 
   private static VcpTokenStore createStore(boolean expired) throws Exception {
     Date ref =
@@ -57,6 +62,11 @@ public class VcpTokenStoreTest {
     Writer w = mock(Writer.class);
     doThrow(IOException.class).when(w).write(any(char[].class), anyInt(), anyInt());
     return w;
+  }
+
+  @Before
+  public void configureMocks() throws Exception {
+    oidcTokens = TokenUtils.createToken();
   }
 
   @Test
@@ -105,7 +115,9 @@ public class VcpTokenStoreTest {
     PowerMockito.mockStatic(Configuration.class);
     when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
 
-    VcpTokenStore store = createStore(true).toBuilder().build();
+    VcpTokenStore store = PowerMockito.spy(createStore(true).toBuilder().build());
+    doReturn(new OIDCTokenResponse(oidcTokens.toOIDCTokens())).when(store).sendRefreshToken(Mockito.any(), Mockito.any());
+
     assertThat(
         "tokens in store are not expired",
         store.getTokens().stream().allMatch(VcpToken::isExpired));

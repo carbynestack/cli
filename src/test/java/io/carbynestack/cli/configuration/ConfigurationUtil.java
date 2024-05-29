@@ -8,9 +8,10 @@ package io.carbynestack.cli.configuration;
 
 import io.carbynestack.amphora.common.AmphoraServiceUri;
 import io.carbynestack.castor.common.CastorServiceUri;
+import lombok.SneakyThrows;
+
 import java.net.URI;
 import java.util.UUID;
-import lombok.SneakyThrows;
 
 public class ConfigurationUtil {
 
@@ -28,6 +29,8 @@ public class ConfigurationUtil {
     configuration.getProvider(1).ephemeralServiceUrl = URI.create(String.format("%s", vcp1BaseUrl));
     configuration.getProvider(1).oAuth2clientId = UUID.randomUUID().toString();
     configuration.getProvider(1).oAuth2CallbackUrl = URI.create("http://localhost/vcp-1");
+    configuration.getProvider(1).oAuth2AuthEndpointUri = URI.create(String.format("%s/auth2/auth", vcp1BaseUrl));
+    configuration.getProvider(1).oAuth2TokenEndpointUri = URI.create(String.format("%s/auth2/token", vcp1BaseUrl));
     configuration.getProvider(2).baseUrl = URI.create(VCP_2_BASE_URL);
     configuration.getProvider(2).amphoraServiceUri =
         new AmphoraServiceUri(String.format("%s/amphora", vcp2BaseUrl));
@@ -36,6 +39,8 @@ public class ConfigurationUtil {
     configuration.getProvider(2).ephemeralServiceUrl = URI.create(String.format("%s", vcp2BaseUrl));
     configuration.getProvider(2).oAuth2clientId = UUID.randomUUID().toString();
     configuration.getProvider(2).oAuth2CallbackUrl = URI.create("http://localhost/vcp-2");
+    configuration.getProvider(2).oAuth2AuthEndpointUri = URI.create(String.format("%s/auth2/auth", vcp2BaseUrl));
+    configuration.getProvider(2).oAuth2TokenEndpointUri = URI.create(String.format("%s/auth2/token", vcp2BaseUrl));
     return configuration;
   }
 

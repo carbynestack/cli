@@ -28,6 +28,7 @@ import org.apache.commons.lang3.Range;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.http.client.utils.URIBuilder;
 
+import java.io.IOException;
 import java.net.BindException;
 import java.net.URI;
 import java.util.List;
@@ -134,8 +135,7 @@ public class LoginCommand {
       return server
           .getAuthorizationCode()
           .map(code -> Try.of(() -> {
-              TokenRequest tokenRequest = createTokenRequest(vcpConfiguration, code, callback, clientID);
-              TokenResponse tokenResponse = OIDCTokenResponseParser.parse(tokenRequest.toHTTPRequest().send());
+              TokenResponse tokenResponse = sendTokenRequest(createTokenRequest(vcpConfiguration, code, callback, clientID));
               if (tokenResponse instanceof TokenErrorResponse) {
                 throw new CsCliLoginException(LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN);
               }
@@ -159,6 +159,10 @@ public class LoginCommand {
         return Either.left(LoginCommandError.UNEXPECTED);
       }
     }
+  }
+
+  protected TokenResponse sendTokenRequest(TokenRequest request) throws IOException, ParseException {
+    return OIDCTokenResponseParser.parse(request.toHTTPRequest().send());
   }
 
   public enum LoginCommandError implements AuthenticationError {

@@ -44,10 +44,12 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
           .get();
 
   private State state;
+  private AuthorizationCode authorizationCode;
 
   @Before
   public void setUp() {
       state = new State();
+      authorizationCode = new AuthorizationCode(RandomStringUtils.randomAlphanumeric(20));
   }
 
   @Test
@@ -66,12 +68,11 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
       throws Exception {
     try (OAuth2AuthenticationCodeCallbackHttpServer server =
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL, state)) {
-      String code = RandomStringUtils.randomAlphanumeric(20);
-      CompletableFuture<Try<HttpResponse>> f = invokeCallback(Option.some(code));
+      CompletableFuture<Try<HttpResponse>> f = invokeCallback(Option.some(authorizationCode));
       Either<CallbackError, AuthorizationCode> r = server.getAuthorizationCode();
       assertThat("invoking callback failed", f.get().get().getStatusLine().getStatusCode() == 200);
       assertThat("getting code didn't succeed", r.isRight());
-      assertEquals("incorrect code delivered", code, r.get());
+      assertEquals("incorrect code delivered", authorizationCode.getValue(), r.get().getValue());
     }
   }
 
@@ -92,21 +93,22 @@ public class OAuth2AuthenticationCodeCallbackHttpServerTest {
   public void givenCallbackIsCalledTwice_whenGetCode_thenDoesNotBlock() throws Exception {
     try (OAuth2AuthenticationCodeCallbackHttpServer server =
         new OAuth2AuthenticationCodeCallbackHttpServer(CALLBACK_URL, state)) {
-      String code = RandomStringUtils.randomAlphanumeric(20);
-      invokeCallback(Option.some(code));
+      invokeCallback(Option.some(authorizationCode));
       server.getAuthorizationCode();
       HttpResponse response = invokeCallback(Option.none()).get(1, TimeUnit.SECONDS).get();
       assertEquals("Expected internal server error", 500, response.getStatusLine().getStatusCode());
     }
   }
 
-  private CompletableFuture<Try<HttpResponse>> invokeCallback(Option<String> code) {
+  private CompletableFuture<Try<HttpResponse>> invokeCallback(Option<AuthorizationCode> code) {
     return CompletableFuture.supplyAsync(
         () ->
             Try.of(
                 () -> {
                   URIBuilder builder = new URIBuilder(CALLBACK_URL);
-                  code.forEach(c -> builder.addParameter("code", c));
+                  code.forEach(c -> builder.addParameter("code", c.getValue()));
+                  builder.addParameter("state", state.getValue());
+                  builder.addParameter("scope", "openid offline");
                   URI callbackUrlWithCode = builder.build();
                   HttpClient client = HttpClients.custom().disableAutomaticRetries().build();
                   HttpGet httpGet = new HttpGet(callbackUrlWithCode);

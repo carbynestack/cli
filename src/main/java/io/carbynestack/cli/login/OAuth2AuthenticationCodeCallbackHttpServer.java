@@ -46,6 +46,8 @@ public class OAuth2AuthenticationCodeCallbackHttpServer implements Closeable {
                 .addHttpListener(callbackUrl.getPort(), callbackUrl.getHost())
                 .setHandler(handler -> {
                     synchronized (OAuth2AuthenticationCodeCallbackHttpServer.this) {
+
+                        // example
                         AuthenticationResponse response = AuthenticationResponseParser.parse(URI.create(handler.getRequestURL() + "?" + handler.getQueryString()));
 
                         // Check the state to ensure the response is valid (not a CSRF attack)
