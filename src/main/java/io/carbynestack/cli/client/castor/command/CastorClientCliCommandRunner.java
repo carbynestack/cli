@@ -71,8 +71,7 @@ abstract class CastorClientCliCommandRunner<T extends CastorClientCliCommandConf
                               t ->
                                   BearerTokenProvider.builder()
                                       .bearerToken(
-                                          vcpConfiguration.getCastorServiceUri(),
-                                          t.getIdToken())
+                                          vcpConfiguration.getCastorServiceUri(), t.getIdToken())
                                       .build())
                           .peek(builder::withBearerTokenProvider);
                       return builder.build();
@@ -104,8 +103,7 @@ abstract class CastorClientCliCommandRunner<T extends CastorClientCliCommandConf
                               t ->
                                   BearerTokenProvider.builder()
                                       .bearerToken(
-                                          vcpConfiguration.getCastorServiceUri(),
-                                          t.getIdToken())
+                                          vcpConfiguration.getCastorServiceUri(), t.getIdToken())
                                       .build())
                           .peek(intraVcpClientBuilder::withBearerTokenProvider);
                       return intraVcpClientBuilder.build();

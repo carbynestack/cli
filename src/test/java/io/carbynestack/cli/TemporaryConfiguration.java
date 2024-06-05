@@ -16,14 +16,13 @@ import io.carbynestack.cli.login.VcpToken;
 import io.carbynestack.cli.login.VcpTokenStore;
 import io.carbynestack.cli.util.TokenUtils;
 import io.vavr.control.Option;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.rules.TemporaryFolder;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.rules.TemporaryFolder;
 
 @Slf4j
 public class TemporaryConfiguration extends TemporaryFolder {
@@ -62,12 +61,7 @@ public class TemporaryConfiguration extends TemporaryFolder {
     VcpTokenStore.setDefaultLocation(Option.of(accessTokensFile.toPath()));
     VcpTokenStore.VcpTokenStoreBuilder builder = VcpTokenStore.builder();
     Lists.newArrayList(configuration.getProviders())
-        .forEach(
-            p ->
-                builder.token(
-                    VcpToken.from(
-                        p.getBaseUrl(),
-                        TokenUtils.createToken())));
+        .forEach(p -> builder.token(VcpToken.from(p.getBaseUrl(), TokenUtils.createToken())));
     VcpTokenStore s = builder.build();
     s.persist();
   }

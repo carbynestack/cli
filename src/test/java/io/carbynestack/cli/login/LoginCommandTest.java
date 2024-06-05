@@ -6,29 +6,6 @@
  */
 package io.carbynestack.cli.login;
 
-import com.nimbusds.oauth2.sdk.AuthorizationCode;
-import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
-import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
-import io.carbynestack.cli.TemporaryConfiguration;
-import io.carbynestack.cli.util.TokenUtils;
-import io.vavr.control.Either;
-import io.vavr.control.Option;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.Range;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.SystemOutRule;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.net.BindException;
-import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import static io.carbynestack.cli.login.BrowserLauncher.BrowserLaunchError.NOT_SUPPORTED;
 import static io.carbynestack.cli.login.BrowserLauncher.browse;
 import static io.carbynestack.cli.login.LoginCommand.DEFAULT_CALLBACK_PORTS;
@@ -40,6 +17,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
+import com.nimbusds.oauth2.sdk.AuthorizationCode;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
+import io.carbynestack.cli.TemporaryConfiguration;
+import io.carbynestack.cli.util.TokenUtils;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
+import java.net.BindException;
+import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.Range;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BrowserLauncher.class})
@@ -62,11 +61,10 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(new AuthorizationCode()))
-        .when(callbackServer)
-        .getAuthorizationCode();
+    doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
 
-    LoginCommand command = Mockito.spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
+    LoginCommand command =
+        Mockito.spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
     doReturn(new OIDCTokenResponse(oidcTokens)).when(command).sendTokenRequest(Mockito.any());
 
     command.login();
@@ -88,9 +86,7 @@ public class LoginCommandTest {
     doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
         .when(callbackServer)
         .getAuthorizationCode();
-    LoginCommand command =
-        new LoginCommand(
-            DEFAULT_CALLBACK_PORTS, (cfg, state) -> callbackServer);
+    LoginCommand command = new LoginCommand(DEFAULT_CALLBACK_PORTS, (cfg, state) -> callbackServer);
     try {
       command.login();
       fail("expected exception has not been thrown");
@@ -104,21 +100,20 @@ public class LoginCommandTest {
     when(browse(any())).thenReturn(Option.none());
     OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
         mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(new AuthorizationCode()))
-        .when(callbackServer)
-        .getAuthorizationCode();
+    doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
     AtomicInteger attempt = new AtomicInteger(0);
     int rounds = 5;
     LoginCommand command =
-        Mockito.spy(new LoginCommand(
-            DEFAULT_CALLBACK_PORTS,
-            (cfg, state) -> {
-              if (attempt.getAndAdd(1) < rounds) {
-                throw new RuntimeException(new BindException());
-              } else {
-                return callbackServer;
-              }
-            }));
+        Mockito.spy(
+            new LoginCommand(
+                DEFAULT_CALLBACK_PORTS,
+                (cfg, state) -> {
+                  if (attempt.getAndAdd(1) < rounds) {
+                    throw new RuntimeException(new BindException());
+                  } else {
+                    return callbackServer;
+                  }
+                }));
     doReturn(new OIDCTokenResponse(oidcTokens)).when(command).sendTokenRequest(Mockito.any());
 
     command.login();

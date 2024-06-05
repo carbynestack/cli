@@ -22,18 +22,17 @@ import io.carbynestack.cli.exceptions.CsCliConfigurationException;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.Range;
-import org.apache.commons.text.StringEscapeUtils;
-import org.apache.http.client.utils.URIBuilder;
-
 import java.io.IOException;
 import java.net.BindException;
 import java.net.URI;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.Range;
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.http.client.utils.URIBuilder;
 
 @Slf4j
 @Parameters(
@@ -54,9 +53,11 @@ public class LoginCommand {
   private final Range<Integer> callbackPortRange;
   private final BiFunction<URI, State, OAuth2AuthenticationCodeCallbackHttpServer>
       callbackServerProvider;
+
   @Getter
   @Parameter(names = "--help", descriptionKey = "option.help-description", help = true)
   private boolean help;
+
   public LoginCommand() {
     this(
         DEFAULT_CALLBACK_PORTS,
@@ -72,7 +73,11 @@ public class LoginCommand {
     this.callbackServerProvider = callbackServerProvider;
   }
 
-  private static TokenRequest createTokenRequest(VcpConfiguration vcpConfiguration, AuthorizationCode authzCode, URI callback, ClientID clientID) {
+  private static TokenRequest createTokenRequest(
+      VcpConfiguration vcpConfiguration,
+      AuthorizationCode authzCode,
+      URI callback,
+      ClientID clientID) {
     AuthorizationGrant authzGrant = new AuthorizationCodeGrant(authzCode, callback);
     Scope scope = new Scope("offline", "openid");
 
@@ -134,18 +139,27 @@ public class LoginCommand {
 
       return server
           .getAuthorizationCode()
-          .map(code -> Try.of(() -> {
-              TokenResponse tokenResponse = sendTokenRequest(createTokenRequest(vcpConfiguration, code, callback, clientID));
-              if (tokenResponse instanceof TokenErrorResponse) {
-                throw new CsCliLoginException(LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN);
-              }
+          .map(
+              code ->
+                  Try.of(
+                      () -> {
+                        TokenResponse tokenResponse =
+                            sendTokenRequest(
+                                createTokenRequest(vcpConfiguration, code, callback, clientID));
+                        if (tokenResponse instanceof TokenErrorResponse) {
+                          throw new CsCliLoginException(
+                              LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN);
+                        }
 
-              OIDCTokenResponse successResponse = (OIDCTokenResponse) tokenResponse.toSuccessResponse();
-              return successResponse.getOIDCTokens();
-          }))
+                        OIDCTokenResponse successResponse =
+                            (OIDCTokenResponse) tokenResponse.toSuccessResponse();
+                        return successResponse.getOIDCTokens();
+                      }))
           .mapLeft(e -> (AuthenticationError) e)
-          .flatMap(t -> t.onFailure(e -> log.error("getting access token failed unexpectedly", e))
-                         .toEither(LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN))
+          .flatMap(
+              t ->
+                  t.onFailure(e -> log.error("getting access token failed unexpectedly", e))
+                      .toEither(LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN))
           .map(token -> VcpToken.from(vcpConfiguration.getBaseUrl(), token));
     } catch (RuntimeException re) {
       if (re.getCause() instanceof BindException) {
@@ -161,7 +175,8 @@ public class LoginCommand {
     }
   }
 
-  protected TokenResponse sendTokenRequest(TokenRequest request) throws IOException, ParseException {
+  protected TokenResponse sendTokenRequest(TokenRequest request)
+      throws IOException, ParseException {
     return OIDCTokenResponseParser.parse(request.toHTTPRequest().send());
   }
 
