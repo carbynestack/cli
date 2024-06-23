@@ -6,14 +6,15 @@
  */
 package io.carbynestack.cli.util;
 
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
-
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 @UtilityClass
 public class TokenUtils {
@@ -28,7 +29,16 @@ public class TokenUtils {
           (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse(jsonString);
       return OIDCTokens.parse(jsonObject);
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new TokenCreationException(e);
     }
+  }
+}
+
+/*
+ * Avoiding throwing raw exception types.
+ */
+class TokenCreationException extends RuntimeException {
+  public TokenCreationException(Throwable cause) {
+    super(cause);
   }
 }
