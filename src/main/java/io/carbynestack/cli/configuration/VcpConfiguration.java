@@ -233,7 +233,7 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
-  private void setOauth2AuthEndpointUri(String oAuth2AuthEndpointUri) {
+  public void setOauth2AuthEndpointUri(String oAuth2AuthEndpointUri) {
     this.oAuth2AuthEndpointUri = URI.create(oAuth2AuthEndpointUri);
   }
 
@@ -249,7 +249,7 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 18)
-  private void setOauth2TokenEndpointUri(String oAuth2TokenEndpointUri) {
+  public void setOauth2TokenEndpointUri(String oAuth2TokenEndpointUri) {
     this.oAuth2TokenEndpointUri = URI.create(oAuth2TokenEndpointUri);
   }
 
