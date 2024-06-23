@@ -6,18 +6,6 @@
  */
 package io.carbynestack.cli.login;
 
-import static io.carbynestack.cli.login.BrowserLauncher.BrowserLaunchError.NOT_SUPPORTED;
-import static io.carbynestack.cli.login.BrowserLauncher.browse;
-import static io.carbynestack.cli.login.LoginCommand.DEFAULT_CALLBACK_PORTS;
-import static io.carbynestack.cli.login.LoginCommand.LoginCommandError;
-import static io.carbynestack.cli.login.VcpTokenStore.VcpTokenStoreError;
-import static io.carbynestack.cli.login.VcpTokenStore.load;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import com.nimbusds.oauth2.sdk.AuthorizationCode;
 import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
@@ -25,9 +13,6 @@ import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.util.TokenUtils;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import java.net.BindException;
-import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Range;
 import org.junit.Before;
@@ -39,6 +24,22 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.net.BindException;
+import java.net.SocketException;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static io.carbynestack.cli.login.BrowserLauncher.BrowserLaunchError.NOT_SUPPORTED;
+import static io.carbynestack.cli.login.BrowserLauncher.browse;
+import static io.carbynestack.cli.login.LoginCommand.DEFAULT_CALLBACK_PORTS;
+import static io.carbynestack.cli.login.LoginCommand.LoginCommandError;
+import static io.carbynestack.cli.login.VcpTokenStore.VcpTokenStoreError;
+import static io.carbynestack.cli.login.VcpTokenStore.load;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BrowserLauncher.class})
@@ -64,7 +65,7 @@ public class LoginCommandTest {
     doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
 
     LoginCommand command =
-        Mockito.spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
+        spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
     doReturn(new OIDCTokenResponse(oidcTokens)).when(command).sendTokenRequest(Mockito.any());
 
     command.login();
@@ -104,7 +105,7 @@ public class LoginCommandTest {
     AtomicInteger attempt = new AtomicInteger(0);
     int rounds = 5;
     LoginCommand command =
-        Mockito.spy(
+        spy(
             new LoginCommand(
                 DEFAULT_CALLBACK_PORTS,
                 (cfg, state) -> {

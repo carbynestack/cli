@@ -8,15 +8,22 @@ package io.carbynestack.cli.login;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
 import java.net.URI;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Value;
 
 @Value
 @AllArgsConstructor
 public class VcpToken {
+
+  String vcpBaseUrl;
+  String accessToken;
+  String idToken;
+  String refreshToken;
+  Date expires;
 
   public static VcpToken from(Date created, URI vcpBaseUrl, OIDCTokens tokens) {
     return new VcpToken(
@@ -31,12 +38,6 @@ public class VcpToken {
   public static VcpToken from(URI vcpBaseUrl, OIDCTokens tokens) {
     return from(new Date(), vcpBaseUrl, tokens);
   }
-
-  String vcpBaseUrl;
-  String accessToken;
-  String idToken;
-  String refreshToken;
-  Date expires;
 
   @JsonIgnore
   public boolean isExpired() {
