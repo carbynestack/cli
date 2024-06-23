@@ -6,20 +6,21 @@
  */
 package io.carbynestack.cli.configuration;
 
-import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
-import static io.carbynestack.cli.util.ConsoleReader.readOrDefault;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.carbynestack.amphora.common.AmphoraServiceUri;
 import io.carbynestack.castor.common.CastorServiceUri;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+
+import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
+import static io.carbynestack.cli.util.ConsoleReader.readOrDefault;
 
 @Accessors(chain = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -38,10 +39,6 @@ public class VcpConfiguration {
 
   private static final ResourceBundle MESSAGES =
       ResourceBundle.getBundle(CONFIGURATION_MESSAGE_BUNDLE);
-
-  @JsonProperty(value = "id", required = true, index = 10)
-  private int providerNumber;
-
   URI baseUrl;
   AmphoraServiceUri amphoraServiceUri;
   CastorServiceUri castorServiceUri;
@@ -50,6 +47,8 @@ public class VcpConfiguration {
   URI oAuth2AuthEndpointUri;
   URI oAuth2TokenEndpointUri;
   URI oAuth2CallbackUrl;
+  @JsonProperty(value = "id", required = true, index = 10)
+  private int providerNumber;
 
   VcpConfiguration(int providerNumber) {
     this.providerNumber = providerNumber;
@@ -57,61 +56,53 @@ public class VcpConfiguration {
 
   void configure() throws CsCliConfigurationException {
     try {
-      System.out.println(String.format("Configuring Provider #%d", providerNumber));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.base-url"), getActualBaseUrl())));
+      System.out.printf("Configuring Provider #%d%n", providerNumber);
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.base-url"), getActualBaseUrl()));
       updateBaseUrlIfChanged(getActualBaseUrl(), readOrDefault(getActualBaseUrl()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.amphora-service-url"),
-                  getActualAmphoraServiceUri())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.amphora-service-url"),
+              getActualAmphoraServiceUri()));
       amphoraServiceUri = new AmphoraServiceUri(readOrDefault(getActualAmphoraServiceUri()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.castor-service-url"),
-                  getActualCastorServiceUri())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.castor-service-url"),
+              getActualCastorServiceUri()));
       castorServiceUri = new CastorServiceUri(readOrDefault(getActualCastorServiceUri()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.ephemeral-service-url"),
-                  getActualEphemeralServiceUrl())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.ephemeral-service-url"),
+              getActualEphemeralServiceUrl()));
       ephemeralServiceUrl = URI.create(readOrDefault(getActualEphemeralServiceUrl()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.oauth2-client-id"),
-                  getActualOAuth2ClientId())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.oauth2-client-id"),
+              getActualOAuth2ClientId()));
       oAuth2clientId = readOrDefault(getActualOAuth2ClientId());
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.oauth2-auth-endpoint-uri"),
-                  getOauth2AuthEndpointUri())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.oauth2-auth-endpoint-uri"),
+              getOauth2AuthEndpointUri()));
       oAuth2AuthEndpointUri = URI.create(readOrDefault(getActualOauth2AuthEndpointUri()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.oauth2-token-endpoint-uri"),
-                  getOauth2AuthEndpointUri())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.oauth2-token-endpoint-uri"),
+              getOauth2AuthEndpointUri()));
       oAuth2TokenEndpointUri = URI.create(readOrDefault(getActualOauth2TokenEndpointUri()));
-      System.out.print(
-          String.format(
-              "\t%s",
-              MessageFormat.format(
-                  MESSAGES.getString("configuration.request.vcp.oauth2-callback-url"),
-                  getActualOAuth2CallbackUrl())));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.oauth2-callback-url"),
+              getActualOAuth2CallbackUrl()));
       oAuth2CallbackUrl = URI.create(readOrDefault(getActualOAuth2CallbackUrl()));
     } catch (NoSuchElementException | IllegalStateException | IllegalArgumentException e) {
       throw new CsCliConfigurationException(MESSAGES.getString("configuration.failed"), e);
@@ -121,11 +112,6 @@ public class VcpConfiguration {
   @JsonProperty(value = "baseUrl", required = true, index = 11)
   private String getActualBaseUrl() {
     return baseUrl != null ? baseUrl.toString() : "";
-  }
-
-  @JsonProperty(value = "baseUrl", required = true, index = 11)
-  private void setBaseUrl(String baseUrl) {
-    this.baseUrl = URI.create(baseUrl);
   }
 
   private void updateBaseUrlIfChanged(String oldValue, String newValue) {
@@ -144,6 +130,11 @@ public class VcpConfiguration {
     return baseUrl;
   }
 
+  @JsonProperty(value = "baseUrl", required = true, index = 11)
+  private void setBaseUrl(String baseUrl) {
+    this.baseUrl = URI.create(baseUrl);
+  }
+
   public AmphoraServiceUri getAmphoraServiceUri() {
     return System.getenv(MessageFormat.format(AMPHORA_URL_ENV_KEY_FORMAT, providerNumber)) != null
         ? new AmphoraServiceUri(
@@ -152,13 +143,13 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "amphoraServiceUrl", required = true, index = 12)
-  private String getActualAmphoraServiceUri() {
-    return amphoraServiceUri != null ? amphoraServiceUri.getServiceUri().toString() : "";
+  private void setAmphoraServiceUri(String amphoraServiceAddress) {
+    this.amphoraServiceUri = new AmphoraServiceUri(amphoraServiceAddress);
   }
 
   @JsonProperty(value = "amphoraServiceUrl", required = true, index = 12)
-  private void setAmphoraServiceUri(String amphoraServiceAddress) {
-    this.amphoraServiceUri = new AmphoraServiceUri(amphoraServiceAddress);
+  private String getActualAmphoraServiceUri() {
+    return amphoraServiceUri != null ? amphoraServiceUri.getServiceUri().toString() : "";
   }
 
   public CastorServiceUri getCastorServiceUri() {
@@ -169,13 +160,13 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "castorServiceUrl", required = true, index = 13)
-  private String getActualCastorServiceUri() {
-    return castorServiceUri != null ? castorServiceUri.getRestServiceUri().toString() : "";
+  private void setCastorServiceUri(String castorServiceAddress) {
+    this.castorServiceUri = new CastorServiceUri(castorServiceAddress);
   }
 
   @JsonProperty(value = "castorServiceUrl", required = true, index = 13)
-  private void setCastorServiceUri(String castorServiceAddress) {
-    this.castorServiceUri = new CastorServiceUri(castorServiceAddress);
+  private String getActualCastorServiceUri() {
+    return castorServiceUri != null ? castorServiceUri.getRestServiceUri().toString() : "";
   }
 
   public URI getEphemeralServiceUrl() {
@@ -203,13 +194,13 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
-  public String getActualOAuth2ClientId() {
-    return oAuth2clientId != null ? oAuth2clientId : "";
+  public void setOAuth2ClientId(String oAuth2ClientId) {
+    this.oAuth2clientId = oAuth2ClientId;
   }
 
   @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
-  public void setOAuth2ClientId(String oAuth2ClientId) {
-    this.oAuth2clientId = oAuth2ClientId;
+  public String getActualOAuth2ClientId() {
+    return oAuth2clientId != null ? oAuth2clientId : "";
   }
 
   public URI getOAuth2CallbackUrl() {
@@ -221,13 +212,13 @@ public class VcpConfiguration {
   }
 
   @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 16)
-  private String getActualOAuth2CallbackUrl() {
-    return oAuth2CallbackUrl != null ? oAuth2CallbackUrl.toString() : "";
+  private void setOAuth2CallbackUrl(String oAuth2CallbackUrl) {
+    this.oAuth2CallbackUrl = URI.create(oAuth2CallbackUrl);
   }
 
   @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 16)
-  private void setOAuth2CallbackUrl(String oAuth2CallbackUrl) {
-    this.oAuth2CallbackUrl = URI.create(oAuth2CallbackUrl);
+  private String getActualOAuth2CallbackUrl() {
+    return oAuth2CallbackUrl != null ? oAuth2CallbackUrl.toString() : "";
   }
 
   @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
@@ -277,6 +268,10 @@ public class VcpConfiguration {
         + ephemeralServiceUrl
         + ", oauth2ClientId="
         + oAuth2clientId
+        + ", oauth2AuthEndpointUri="
+        + oAuth2AuthEndpointUri
+        + ", oauth2TokenEndpointUri="
+        + oAuth2TokenEndpointUri
         + ", oauth2CallbackUrl="
         + oAuth2CallbackUrl
         + '}';

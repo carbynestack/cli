@@ -6,17 +6,9 @@
  */
 package io.carbynestack.cli.configuration;
 
-import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
-
 import io.carbynestack.amphora.common.AmphoraServiceUri;
 import io.carbynestack.castor.common.CastorServiceUri;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
-import java.net.URI;
-import java.text.MessageFormat;
-import java.util.ResourceBundle;
-import java.util.UUID;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -26,13 +18,21 @@ import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 
+import java.net.URI;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
+import java.util.UUID;
+
+import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
+
 public class VcpConfigurationTest {
   private static final ResourceBundle MESSAGES =
       ResourceBundle.getBundle(CONFIGURATION_MESSAGE_BUNDLE);
-
+  @Rule public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
   @Rule public EnvironmentVariables environmentVariables = new EnvironmentVariables();
   @Rule public TextFromStandardInputStream systemInMock = emptyStandardInputStream();
-  @Rule public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
   @Test
   public void givenEnvVariableForVcp1AmphoraService_whenGetAmphoraUrl_thenReturnEnvVariableValue()
@@ -83,6 +83,8 @@ public class VcpConfigurationTest {
         String.format("http://%s", RandomStringUtils.randomAlphanumeric(15));
     String expectedOAuth2CliendId = UUID.randomUUID().toString();
     String expectedOAuth2CallbackUrl = "http://localhost/vcp-1";
+    String expectedOAuth2EndpointUri = String.format("http://%s/oauth2/auth", RandomStringUtils.randomAlphanumeric(15));
+    String expectedOAuth2TokenUri = String.format("http://%s/oauth2/token", RandomStringUtils.randomAlphanumeric(15));
     VcpConfiguration vcpConfiguration = new VcpConfiguration(1);
     systemInMock.provideLines(
         "",
@@ -90,6 +92,8 @@ public class VcpConfigurationTest {
         expectedCasorUrl,
         expectedEphemeralUrl,
         expectedOAuth2CliendId,
+            expectedOAuth2EndpointUri,
+            expectedOAuth2TokenUri,
         expectedOAuth2CallbackUrl);
     vcpConfiguration.configure();
     Assert.assertNull(vcpConfiguration.baseUrl);
@@ -118,6 +122,7 @@ public class VcpConfigurationTest {
         CoreMatchers.containsString(
             MessageFormat.format(
                 MESSAGES.getString("configuration.request.vcp.oauth2-callback-url"), "")));
+
     assertEquals(
         new AmphoraServiceUri(expectedAmphoraUrl), vcpConfiguration.getAmphoraServiceUri());
     assertEquals(new CastorServiceUri(expectedCasorUrl), vcpConfiguration.getCastorServiceUri());
