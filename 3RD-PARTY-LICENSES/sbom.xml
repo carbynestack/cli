@@ -4,7 +4,7 @@
          <name>amphora-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-common</artifactId>
-         <version>0.1.1</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -16,7 +16,7 @@
          <name>amphora-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>amphora-java-client</artifactId>
-         <version>0.1.1</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -142,6 +142,32 @@
          </licenses>
       </dependency>
       <dependency>
+         <name>Apache Log4j API</name>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-api</artifactId>
+         <version>2.20.0</version>
+         <projectUrl>https://logging.apache.org/log4j/2.x/log4j-api/</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache License, Version 2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
+         <name>Apache Log4j Core</name>
+         <groupId>org.apache.logging.log4j</groupId>
+         <artifactId>log4j-core</artifactId>
+         <version>2.24.1</version>
+         <projectUrl>https://logging.apache.org/log4j/2.x/log4j/log4j-core/</projectUrl>
+         <licenses>
+            <license>
+               <name>Apache-2.0</name>
+               <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </license>
+         </licenses>
+      </dependency>
+      <dependency>
          <name>asm</name>
          <groupId>org.ow2.asm</groupId>
          <artifactId>asm</artifactId>
@@ -171,7 +197,7 @@
          <name>Carbyne Stack Ephemeral Java Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>ephemeral-java-client</artifactId>
-         <version>0.1-SNAPSHOT-2804677120-20-efc7f8d</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -183,7 +209,7 @@
          <name>Carbyne Stack Java HTTP Client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>java-http-client</artifactId>
-         <version>0.1-SNAPSHOT-4075044562-9-8ffab9c</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -195,7 +221,7 @@
          <name>Carbyne Stack MP-SPDZ Integration Utilities</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>mp-spdz-integration</artifactId>
-         <version>0.2-SNAPSHOT-3541842672-11-c754bbb</version>
+         <version>0.2.2</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -207,7 +233,7 @@
          <name>castor-common</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-common</artifactId>
-         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -219,7 +245,7 @@
          <name>castor-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-java-client</artifactId>
-         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -231,7 +257,7 @@
          <name>castor-upload-java-client</name>
          <groupId>io.carbynestack</groupId>
          <artifactId>castor-upload-java-client</artifactId>
-         <version>0.1-SNAPSHOT-4191841095-22-1721229</version>
+         <version>0.2.0</version>
          <licenses>
             <license>
                <name>Apache-2.0</name>
@@ -674,45 +700,6 @@
          <artifactId>spring-websocket</artifactId>
          <version>5.3.20</version>
          <projectUrl>https://github.com/spring-projects/spring-framework</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
-         <name>spring-security-core</name>
-         <groupId>org.springframework.security</groupId>
-         <artifactId>spring-security-core</artifactId>
-         <version>5.5.8</version>
-         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
-         <name>spring-security-crypto</name>
-         <groupId>org.springframework.security</groupId>
-         <artifactId>spring-security-crypto</artifactId>
-         <version>5.5.8</version>
-         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
-         <licenses>
-            <license>
-               <name>Apache License, Version 2.0</name>
-               <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-            </license>
-         </licenses>
-      </dependency>
-      <dependency>
-         <name>spring-security-web</name>
-         <groupId>org.springframework.security</groupId>
-         <artifactId>spring-security-web</artifactId>
-         <version>5.5.8</version>
-         <projectUrl>https://spring.io/projects/spring-security</projectUrl>
          <licenses>
             <license>
                <name>Apache License, Version 2.0</name>

@@ -8,12 +8,11 @@ package io.carbynestack.cli.login;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
-import lombok.AllArgsConstructor;
-import lombok.Value;
-
 import java.net.URI;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 @Value
 @AllArgsConstructor

@@ -21,7 +21,6 @@ import io.carbynestack.cli.exceptions.CsCliRunnerException;
 import io.carbynestack.cli.login.CsCliLoginException;
 import io.carbynestack.cli.login.VcpToken;
 import io.carbynestack.cli.login.VcpTokenStore;
-import io.carbynestack.cli.util.KeyStoreUtil;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import java.io.File;
@@ -93,10 +92,12 @@ abstract class CastorClientCliCommandRunner<T extends CastorClientCliCommandConf
                                   .getCastorServiceUri()
                                   .getRestServiceUri()
                                   .toString());
-                      KeyStoreUtil.tempKeyStoreForPems(configuration.getTrustedCertificates())
-                          .peek(intraVcpClientBuilder::withTrustedCertificate);
                       if (configuration.isNoSslValidation()) {
                         intraVcpClientBuilder.withoutSslCertificateValidation();
+                      } else {
+                        configuration
+                            .getTrustedCertificates()
+                            .forEach(p -> intraVcpClientBuilder.withTrustedCertificate(p.toFile()));
                       }
                       token
                           .map(

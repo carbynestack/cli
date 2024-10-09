@@ -113,7 +113,7 @@ public class VcpTokenStoreTest {
     VcpTokenStore store = PowerMockito.spy(createStore(true).toBuilder().build());
     doReturn(new OIDCTokenResponse(oidcTokens.toOIDCTokens()))
         .when(store)
-        .sendRefreshToken(Mockito.any(), Mockito.any());
+        .sendRefreshToken(Mockito.any(), Mockito.any(), anyBoolean(), anyList());
 
     assertThat(
         "tokens in store are not expired",

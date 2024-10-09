@@ -6,21 +6,20 @@
  */
 package io.carbynestack.cli.configuration;
 
+import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
+import static io.carbynestack.cli.util.ConsoleReader.readOrDefault;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.carbynestack.amphora.common.AmphoraServiceUri;
 import io.carbynestack.castor.common.CastorServiceUri;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
-
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
-
-import static io.carbynestack.cli.configuration.ConfigurationCommand.CONFIGURATION_MESSAGE_BUNDLE;
-import static io.carbynestack.cli.util.ConsoleReader.readOrDefault;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -47,6 +46,7 @@ public class VcpConfiguration {
   URI oAuth2AuthEndpointUri;
   URI oAuth2TokenEndpointUri;
   URI oAuth2CallbackUrl;
+
   @JsonProperty(value = "id", required = true, index = 10)
   private int providerNumber;
 

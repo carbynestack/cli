@@ -6,7 +6,7 @@
  */
 package io.carbynestack.cli.client.amphora.command;
 
-import static io.carbynestack.cli.client.amphora.AmphoraClientCli.*;
+import static io.carbynestack.cli.client.amphora.AmphoraClientCli.AMPHORA_MESSAGE_BUNDLE;
 
 import com.google.common.collect.Maps;
 import io.carbynestack.amphora.client.AmphoraClient;
@@ -23,7 +23,6 @@ import io.carbynestack.cli.exceptions.CsCliRunnerException;
 import io.carbynestack.cli.login.CsCliLoginException;
 import io.carbynestack.cli.login.VcpToken;
 import io.carbynestack.cli.login.VcpTokenStore;
-import io.carbynestack.cli.util.KeyStoreUtil;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import java.util.Arrays;
@@ -64,10 +63,12 @@ public abstract class AmphoraClientCliCommandRunner<T extends AmphoraClientCliCo
                                             map.get(amphoraServiceUri).getIdToken())
                             .map(amphoraClientBuilder::bearerTokenProvider);
                       }
-                      KeyStoreUtil.tempKeyStoreForPems(configuration.getTrustedCertificates())
-                          .peek(amphoraClientBuilder::addTrustedCertificate);
                       if (configuration.isNoSslValidation()) {
                         amphoraClientBuilder.withoutSslCertificateValidation();
+                      } else {
+                        configuration
+                            .getTrustedCertificates()
+                            .forEach(p -> amphoraClientBuilder.addTrustedCertificate(p.toFile()));
                       }
                       return amphoraClientBuilder.build();
                     }))

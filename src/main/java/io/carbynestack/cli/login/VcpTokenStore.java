@@ -9,12 +9,14 @@ package io.carbynestack.cli.login;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.token.RefreshToken;
 import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.VcpConfiguration;
 import io.carbynestack.cli.exceptions.CsCliRunnerException;
+import io.carbynestack.cli.util.OAuthUtil;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -22,6 +24,10 @@ import io.vavr.control.Try;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -84,8 +90,10 @@ public class VcpTokenStore {
     }
   }
 
-  OIDCTokenResponse sendRefreshToken(VcpToken token, VcpConfiguration c)
-      throws ParseException, IOException {
+  OIDCTokenResponse sendRefreshToken(
+      VcpToken token, VcpConfiguration c, boolean insecure, List<Path> trustedCertificates)
+      throws ParseException, IOException, NoSuchAlgorithmException, KeyStoreException,
+          KeyManagementException, CertificateException {
 
     ClientID clientID = new ClientID(c.getOAuth2ClientId());
     AuthorizationGrant refreshTokenGrant =
@@ -94,7 +102,9 @@ public class VcpTokenStore {
 
     TokenRequest request =
         new TokenRequest(c.getOauth2TokenEndpointUri(), clientID, refreshTokenGrant, authScope);
-    return OIDCTokenResponse.parse(request.toHTTPRequest().send());
+    HTTPRequest httpRequest = request.toHTTPRequest();
+    OAuthUtil.setSslContextForRequestWithConfiguration(httpRequest, insecure, trustedCertificates);
+    return OIDCTokenResponse.parse(httpRequest.send());
   }
 
   public Either<VcpTokenStoreError, VcpTokenStore> persist(Writer w) {
@@ -171,7 +181,12 @@ public class VcpTokenStore {
                 log.debug("refreshing token for VCP with base URL {}", token.getVcpBaseUrl());
                 return Try.of(
                         () -> {
-                          var oidcTokenResponse = sendRefreshToken(token, c);
+                          var oidcTokenResponse =
+                              sendRefreshToken(
+                                  token,
+                                  c,
+                                  configuration.isNoSslValidation(),
+                                  configuration.getTrustedCertificates());
                           if (oidcTokenResponse.indicatesSuccess()) {
                             return oidcTokenResponse.toSuccessResponse().getOIDCTokens();
                           } else {

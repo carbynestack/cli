@@ -6,15 +6,14 @@
  */
 package io.carbynestack.cli.util;
 
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
+
 import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
 
 @UtilityClass
 public class TokenUtils {

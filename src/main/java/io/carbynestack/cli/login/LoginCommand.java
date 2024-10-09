@@ -10,6 +10,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.google.common.collect.Lists;
 import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.http.HTTPRequest;
 import com.nimbusds.oauth2.sdk.id.ClientID;
 import com.nimbusds.oauth2.sdk.id.State;
 import com.nimbusds.openid.connect.sdk.AuthenticationRequest;
@@ -19,12 +20,18 @@ import com.nimbusds.openid.connect.sdk.OIDCTokenResponseParser;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.VcpConfiguration;
 import io.carbynestack.cli.exceptions.CsCliConfigurationException;
+import io.carbynestack.cli.util.OAuthUtil;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
@@ -45,10 +52,7 @@ public class LoginCommand {
   public static final String COMMAND_NAME = "login";
   /* Ephemeral port range used by many Linux kernels. */
   static final Range<Integer> DEFAULT_CALLBACK_PORTS = Range.between(32768, 61000);
-  static final String TENANT_ID = "0ae51e19-07c8-4e4b-bb6d-648ee58410f4";
   private static final ResourceBundle MESSAGES = ResourceBundle.getBundle(LOGIN_MESSAGE_BUNDLE);
-  private static final String[] SCOPES =
-      new String[] {"openid", "email", "profile", "offline_access"};
   private static final int AUTHENTICATION_CODE_TIMEOUT_MILLISECONDS = 120 * 1000;
   private final Range<Integer> callbackPortRange;
   private final BiFunction<URI, State, OAuth2AuthenticationCodeCallbackHttpServer>
@@ -81,9 +85,8 @@ public class LoginCommand {
     AuthorizationGrant authzGrant = new AuthorizationCodeGrant(authzCode, callback);
     Scope scope = new Scope("offline", "openid");
 
-    TokenRequest tokenRequest =
-        new TokenRequest(vcpConfiguration.getOauth2TokenEndpointUri(), clientID, authzGrant, scope);
-    return tokenRequest;
+    return new TokenRequest(
+        vcpConfiguration.getOauth2TokenEndpointUri(), clientID, authzGrant, scope);
   }
 
   public void login() throws CsCliLoginException, CsCliConfigurationException {
@@ -94,7 +97,12 @@ public class LoginCommand {
     Configuration configuration = Configuration.getInstance();
     List<VcpToken> tokens = Lists.newArrayList();
     for (VcpConfiguration vcpConfig : configuration.getProviders()) {
-      Either<? extends AuthenticationError, VcpToken> login = login(vcpConfig, callbackPortRange);
+      Either<? extends AuthenticationError, VcpToken> login =
+          login(
+              vcpConfig,
+              callbackPortRange,
+              configuration.isNoSslValidation(),
+              configuration.getTrustedCertificates());
       tokens.add(login.getOrElseThrow(CsCliLoginException::new));
     }
     VcpTokenStore store = VcpTokenStore.builder().tokens(tokens).build();
@@ -102,7 +110,10 @@ public class LoginCommand {
   }
 
   private Either<? extends AuthenticationError, VcpToken> login(
-      VcpConfiguration vcpConfiguration, Range<Integer> callbackPortCandidates) {
+      VcpConfiguration vcpConfiguration,
+      Range<Integer> callbackPortCandidates,
+      boolean insecure,
+      List<Path> trustedCertificates) {
     URI callbackUrl =
         Try.of(
                 () ->
@@ -145,7 +156,9 @@ public class LoginCommand {
                       () -> {
                         TokenResponse tokenResponse =
                             sendTokenRequest(
-                                createTokenRequest(vcpConfiguration, code, callback, clientID));
+                                createTokenRequest(vcpConfiguration, code, callback, clientID),
+                                insecure,
+                                trustedCertificates);
                         if (tokenResponse instanceof TokenErrorResponse) {
                           throw new CsCliLoginException(
                               LoginCommandError.FAILED_TO_GET_ACCESS_TOKEN);
@@ -167,7 +180,11 @@ public class LoginCommand {
         if (RangeUtils.getLength(callbackPortCandidates) <= 1) {
           return Either.left(LoginCommandError.PORT_RANGE_EXHAUSTION);
         }
-        return login(vcpConfiguration, RangeUtils.consumeLower(callbackPortCandidates));
+        return login(
+            vcpConfiguration,
+            RangeUtils.consumeLower(callbackPortCandidates),
+            insecure,
+            trustedCertificates);
       } else {
         log.error("login failed for unexpected reason", re);
         return Either.left(LoginCommandError.UNEXPECTED);
@@ -175,9 +192,13 @@ public class LoginCommand {
     }
   }
 
-  protected TokenResponse sendTokenRequest(TokenRequest request)
-      throws IOException, ParseException {
-    return OIDCTokenResponseParser.parse(request.toHTTPRequest().send());
+  protected TokenResponse sendTokenRequest(
+      TokenRequest request, boolean insecure, List<Path> trustedCertificates)
+      throws IOException, ParseException, NoSuchAlgorithmException, KeyStoreException,
+          KeyManagementException, CertificateException {
+    HTTPRequest httpRequest = request.toHTTPRequest();
+    OAuthUtil.setSslContextForRequestWithConfiguration(httpRequest, insecure, trustedCertificates);
+    return OIDCTokenResponseParser.parse(httpRequest.send());
   }
 
   public enum LoginCommandError implements AuthenticationError {
