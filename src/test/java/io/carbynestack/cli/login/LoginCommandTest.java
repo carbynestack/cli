@@ -34,14 +34,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
-import org.junit.runner.RunWith;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({BrowserLauncher.class})
 public class LoginCommandTest {
 
   @Rule public final TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
@@ -51,130 +46,142 @@ public class LoginCommandTest {
   private OIDCTokens oidcTokens;
 
   @Before
-  public void configureMocks() throws Exception {
-    PowerMockito.mockStatic(BrowserLauncher.class);
+  public void configureMocks() {
     oidcTokens = TokenUtils.createToken();
   }
 
   @Test
   public void whenLogin_thenStoreHasBeenCreated() throws Exception {
-    when(browse(any())).thenReturn(Option.none());
-    OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
-        mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
+    try (MockedStatic<BrowserLauncher> ms = mockStatic(BrowserLauncher.class)) {
+      ms.when(() -> browse(any())).thenReturn(Option.none());
+      OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
+          mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
+      doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
 
-    LoginCommand command =
-        spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
-    doReturn(new OIDCTokenResponse(oidcTokens))
-        .when(command)
-        .sendTokenRequest(Mockito.any(), anyBoolean(), anyList());
+      LoginCommand command =
+          spy(new LoginCommand(DEFAULT_CALLBACK_PORTS, (url, state) -> callbackServer));
+      doReturn(new OIDCTokenResponse(oidcTokens))
+          .when(command)
+          .sendTokenRequest(Mockito.any(), anyBoolean(), anyList());
 
-    command.login();
-    Either<VcpTokenStoreError, VcpTokenStore> store = load(false);
-    assertThat("store has not been created", store.isRight());
-    for (VcpToken t : store.get().getTokens()) {
-      assertEquals(
-          "stored access token does not equal expected token",
-          oidcTokens.getAccessToken().getValue(),
-          t.getAccessToken());
+      command.login();
+      Either<VcpTokenStoreError, VcpTokenStore> store = load(false);
+      assertThat("store has not been created", store.isRight());
+      for (VcpToken t : store.get().getTokens()) {
+        assertEquals(
+            "stored access token does not equal expected token",
+            oidcTokens.getAccessToken().getValue(),
+            t.getAccessToken());
+      }
     }
   }
 
   @Test
   public void givenLaunchingBrowserFails_whenLogin_thenThrows() throws Exception {
-    when(browse(any())).thenReturn(Option.some(NOT_SUPPORTED));
-    OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
-        mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
-        .when(callbackServer)
-        .getAuthorizationCode();
-    LoginCommand command = new LoginCommand(DEFAULT_CALLBACK_PORTS, (cfg, state) -> callbackServer);
-    try {
-      command.login();
-      fail("expected exception has not been thrown");
-    } catch (CsCliLoginException scle) {
-      assertEquals("unexpected error returned", NOT_SUPPORTED, scle.getAuthenticationError());
+    try (MockedStatic<BrowserLauncher> ms = mockStatic(BrowserLauncher.class)) {
+      ms.when(() -> browse(any())).thenReturn(Option.some(NOT_SUPPORTED));
+      OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
+          mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
+      doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+          .when(callbackServer)
+          .getAuthorizationCode();
+      LoginCommand command =
+          new LoginCommand(DEFAULT_CALLBACK_PORTS, (cfg, state) -> callbackServer);
+      try {
+        command.login();
+        fail("expected exception has not been thrown");
+      } catch (CsCliLoginException scle) {
+        assertEquals("unexpected error returned", NOT_SUPPORTED, scle.getAuthenticationError());
+      }
     }
   }
 
   @Test
   public void givenPortIsInUse_whenLogin_thenSucceedOnNextPort() throws Exception {
-    when(browse(any())).thenReturn(Option.none());
-    OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
-        mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
-    AtomicInteger attempt = new AtomicInteger(0);
-    int rounds = 5;
-    LoginCommand command =
-        spy(
-            new LoginCommand(
-                DEFAULT_CALLBACK_PORTS,
-                (cfg, state) -> {
-                  if (attempt.getAndAdd(1) < rounds) {
-                    throw new RuntimeException(new BindException());
-                  } else {
-                    return callbackServer;
-                  }
-                }));
-    doReturn(new OIDCTokenResponse(oidcTokens))
-        .when(command)
-        .sendTokenRequest(Mockito.any(), anyBoolean(), anyList());
+    try (MockedStatic<BrowserLauncher> ms = mockStatic(BrowserLauncher.class)) {
+      ms.when(() -> browse(any())).thenReturn(Option.none());
+      OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
+          mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
+      doReturn(Either.right(new AuthorizationCode())).when(callbackServer).getAuthorizationCode();
+      AtomicInteger attempt = new AtomicInteger(0);
+      int rounds = 5;
+      LoginCommand command =
+          spy(
+              new LoginCommand(
+                  DEFAULT_CALLBACK_PORTS,
+                  (cfg, state) -> {
+                    if (attempt.getAndAdd(1) < rounds) {
+                      throw new RuntimeException(new BindException());
+                    } else {
+                      return callbackServer;
+                    }
+                  }));
+      doReturn(new OIDCTokenResponse(oidcTokens))
+          .when(command)
+          .sendTokenRequest(Mockito.any(), anyBoolean(), anyList());
 
-    command.login();
-    assertEquals("not enough attempts detected", rounds + 2, attempt.get());
+      command.login();
+      assertEquals("not enough attempts detected", rounds + 2, attempt.get());
+    }
   }
 
   @Test
   public void givenAllPortsAreInUse_whenLogin_thenThrow() throws Exception {
-    when(browse(any())).thenReturn(Option.none());
-    OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
-        mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
-        .when(callbackServer)
-        .getAuthorizationCode();
-    int basePort = 32768;
-    Range<Integer> portRange = Range.between(basePort, basePort + 7);
-    AtomicInteger attempts = new AtomicInteger(0);
-    LoginCommand command =
-        new LoginCommand(
-            portRange,
-            (cfg, state) -> {
-              attempts.getAndIncrement();
-              throw new RuntimeException(new BindException());
-            });
-    try {
-      command.login();
-      fail("expected exception has not been thrown");
-    } catch (CsCliLoginException scle) {
-      assertEquals(
-          "unexpected error returned",
-          LoginCommandError.PORT_RANGE_EXHAUSTION,
-          scle.getAuthenticationError());
-      assertEquals("wrong number of attempts", RangeUtils.getLength(portRange), attempts.get());
+    try (MockedStatic<BrowserLauncher> ms = mockStatic(BrowserLauncher.class)) {
+      ms.when(() -> browse(any())).thenReturn(Option.none());
+      OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
+          mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
+      doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+          .when(callbackServer)
+          .getAuthorizationCode();
+      int basePort = 32768;
+      Range<Integer> portRange = Range.between(basePort, basePort + 7);
+      AtomicInteger attempts = new AtomicInteger(0);
+      LoginCommand command =
+          new LoginCommand(
+              portRange,
+              (cfg, state) -> {
+                attempts.getAndIncrement();
+                throw new RuntimeException(new BindException());
+              });
+      try {
+        command.login();
+        fail("expected exception has not been thrown");
+      } catch (CsCliLoginException scle) {
+        assertEquals(
+            "unexpected error returned",
+            LoginCommandError.PORT_RANGE_EXHAUSTION,
+            scle.getAuthenticationError());
+        assertEquals("wrong number of attempts", RangeUtils.getLength(portRange), attempts.get());
+      }
     }
   }
 
   @Test
   public void givenRuntimeExceptionDuringCallbackServerCreation_whenLogin_thenThrow()
       throws Exception {
-    when(browse(any())).thenReturn(Option.none());
-    OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
-        mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
-    doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
-        .when(callbackServer)
-        .getAuthorizationCode();
-    LoginCommand command =
-        new LoginCommand(
-            DEFAULT_CALLBACK_PORTS,
-            (cfg, state) -> {
-              throw new RuntimeException(new SocketException());
-            });
-    try {
-      command.login();
-      fail("expected exception has not been thrown");
-    } catch (CsCliLoginException scle) {
-      assertEquals(
-          "unexpected error returned", LoginCommandError.UNEXPECTED, scle.getAuthenticationError());
+    try (MockedStatic<BrowserLauncher> ms = mockStatic(BrowserLauncher.class)) {
+      ms.when(() -> browse(any())).thenReturn(Option.none());
+      OAuth2AuthenticationCodeCallbackHttpServer callbackServer =
+          mock(OAuth2AuthenticationCodeCallbackHttpServer.class);
+      doReturn(Either.right(RandomStringUtils.randomAlphanumeric(10)))
+          .when(callbackServer)
+          .getAuthorizationCode();
+      LoginCommand command =
+          new LoginCommand(
+              DEFAULT_CALLBACK_PORTS,
+              (cfg, state) -> {
+                throw new RuntimeException(new SocketException());
+              });
+      try {
+        command.login();
+        fail("expected exception has not been thrown");
+      } catch (CsCliLoginException scle) {
+        assertEquals(
+            "unexpected error returned",
+            LoginCommandError.UNEXPECTED,
+            scle.getAuthenticationError());
+      }
     }
   }
 }

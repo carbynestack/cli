@@ -30,17 +30,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Configuration.class, VcpTokenStore.class})
 public class VcpTokenStoreTest {
 
-  @Rule TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
+  @Rule public TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
   private OIDCTokens oidcTokens;
 
   private static VcpTokenStore createStore(boolean expired) throws Exception {
@@ -97,8 +91,6 @@ public class VcpTokenStoreTest {
 
   @Test
   public void givenValidTokens_whenRefresh_thenDoesNothing() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
     VcpTokenStore store = createStore(false).toBuilder().build();
     assertThat(
         "tokens in store are expired", store.getTokens().stream().noneMatch(VcpToken::isExpired));
@@ -107,18 +99,16 @@ public class VcpTokenStoreTest {
 
   @Test
   public void givenExpiredTokens_whenRefresh_thenRefreshesTokens() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-
-    VcpTokenStore store = PowerMockito.spy(createStore(true).toBuilder().build());
+    VcpTokenStore store = createStore(true).toBuilder().build();
+    VcpTokenStore spyStore = spy(store);
     doReturn(new OIDCTokenResponse(oidcTokens.toOIDCTokens()))
-        .when(store)
+        .when(spyStore)
         .sendRefreshToken(Mockito.any(), Mockito.any(), anyBoolean(), anyList());
 
     assertThat(
         "tokens in store are not expired",
-        store.getTokens().stream().allMatch(VcpToken::isExpired));
-    Either<VcpTokenStoreError, VcpTokenStore> refreshed = store.refresh();
+        spyStore.getTokens().stream().allMatch(VcpToken::isExpired));
+    Either<VcpTokenStoreError, VcpTokenStore> refreshed = spyStore.refresh();
     assertThat("refresh failed", refreshed.isRight());
     assertThat(
         "tokens in store are expired after refresh",
@@ -127,8 +117,6 @@ public class VcpTokenStoreTest {
 
   @Test
   public void givenExpiredTokensAndFailingProvider_whenRefresh_thenRefreshFails() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
     VcpTokenStore store = createStore(true).toBuilder().build();
     Either<VcpTokenStoreError, VcpTokenStore> refreshed = store.refresh();
     assertThat("refresh succeeded despite failing provider", refreshed.isLeft());
