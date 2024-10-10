@@ -1,26 +1,43 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 package io.carbynestack.cli.util;
 
-import com.github.scribejava.core.model.OAuth2AccessToken;
+import static net.minidev.json.parser.JSONParser.DEFAULT_PERMISSIVE_MODE;
+
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import lombok.experimental.UtilityClass;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 
 @UtilityClass
 public class TokenUtils {
 
   public final int VALIDITY = 24 * 60 * 60;
 
-  public OAuth2AccessToken createToken(String tag) {
-    return new OAuth2AccessToken(
-        String.format("%s-access-token", tag),
-        String.format("%s-token-type", tag),
-        VALIDITY,
-        String.format("%s-refresh-token", tag),
-        String.format("%s-scope", tag),
-        String.format("%s-raw-response", tag));
+  public OIDCTokens createToken() {
+    try {
+      String jsonString =
+          new String(Files.readAllBytes(Paths.get("src/test/resources/id_token.json")));
+      JSONObject jsonObject =
+          (JSONObject) new JSONParser(DEFAULT_PERMISSIVE_MODE).parse(jsonString);
+      return OIDCTokens.parse(jsonObject);
+    } catch (Exception e) {
+      throw new TokenCreationException(e);
+    }
+  }
+}
+
+/*
+ * Avoiding throwing raw exception types.
+ */
+class TokenCreationException extends RuntimeException {
+  public TokenCreationException(Throwable cause) {
+    super(cause);
   }
 }

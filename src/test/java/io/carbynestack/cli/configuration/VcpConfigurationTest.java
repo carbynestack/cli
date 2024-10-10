@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -29,10 +29,9 @@ import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
 public class VcpConfigurationTest {
   private static final ResourceBundle MESSAGES =
       ResourceBundle.getBundle(CONFIGURATION_MESSAGE_BUNDLE);
-
+  @Rule public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
   @Rule public EnvironmentVariables environmentVariables = new EnvironmentVariables();
   @Rule public TextFromStandardInputStream systemInMock = emptyStandardInputStream();
-  @Rule public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
 
   @Test
   public void givenEnvVariableForVcp1AmphoraService_whenGetAmphoraUrl_thenReturnEnvVariableValue()
@@ -83,6 +82,10 @@ public class VcpConfigurationTest {
         String.format("http://%s", RandomStringUtils.randomAlphanumeric(15));
     String expectedOAuth2CliendId = UUID.randomUUID().toString();
     String expectedOAuth2CallbackUrl = "http://localhost/vcp-1";
+    String expectedOAuth2EndpointUri =
+        String.format("http://%s/oauth2/auth", RandomStringUtils.randomAlphanumeric(15));
+    String expectedOAuth2TokenUri =
+        String.format("http://%s/oauth2/token", RandomStringUtils.randomAlphanumeric(15));
     VcpConfiguration vcpConfiguration = new VcpConfiguration(1);
     systemInMock.provideLines(
         "",
@@ -90,6 +93,8 @@ public class VcpConfigurationTest {
         expectedCasorUrl,
         expectedEphemeralUrl,
         expectedOAuth2CliendId,
+        expectedOAuth2EndpointUri,
+        expectedOAuth2TokenUri,
         expectedOAuth2CallbackUrl);
     vcpConfiguration.configure();
     Assert.assertNull(vcpConfiguration.baseUrl);
@@ -118,6 +123,7 @@ public class VcpConfigurationTest {
         CoreMatchers.containsString(
             MessageFormat.format(
                 MESSAGES.getString("configuration.request.vcp.oauth2-callback-url"), "")));
+
     assertEquals(
         new AmphoraServiceUri(expectedAmphoraUrl), vcpConfiguration.getAmphoraServiceUri());
     assertEquals(new CastorServiceUri(expectedCasorUrl), vcpConfiguration.getCastorServiceUri());

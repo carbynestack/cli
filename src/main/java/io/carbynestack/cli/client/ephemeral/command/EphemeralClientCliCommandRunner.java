@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -18,7 +18,6 @@ import io.carbynestack.cli.exceptions.CsCliRunnerException;
 import io.carbynestack.cli.login.CsCliLoginException;
 import io.carbynestack.cli.login.VcpToken;
 import io.carbynestack.cli.login.VcpTokenStore;
-import io.carbynestack.cli.util.KeyStoreUtil;
 import io.carbynestack.ephemeral.client.EphemeralEndpoint;
 import io.carbynestack.ephemeral.client.EphemeralMultiClient;
 import io.vavr.control.Option;
@@ -54,9 +53,12 @@ abstract class EphemeralClientCliCommandRunner<T extends EphemeralClientCliComma
                           .withEndpoints(endpoints)
                           .withSslCertificateValidation(!configuration.isNoSslValidation());
                   tokens.forEach(
-                      t -> builder.withBearerTokenProvider(uri -> t.get(uri).getAccessToken()));
-                  KeyStoreUtil.tempKeyStoreForPems(configuration.getTrustedCertificates())
-                      .peek(builder::withTrustedCertificate);
+                      t -> builder.withBearerTokenProvider(uri -> t.get(uri).getIdToken()));
+                  if (!configuration.isNoSslValidation()) {
+                    configuration
+                        .getTrustedCertificates()
+                        .forEach(p -> builder.withTrustedCertificate(p.toFile()));
+                  }
                   return builder.build();
                 }))
         .getOrElseThrow(

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2023 - for information on the respective copyright owner
+  ~ Copyright (c) 2023-2024 - for information on the respective copyright owner
   ~ see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
   ~
   ~ SPDX-License-Identifier: Apache-2.0
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cli</artifactId>
     <groupId>io.carbynestack</groupId>
@@ -58,11 +58,12 @@
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
 
         <!-- Carbyne Stack dependency versions -->
-        <amphora-java-client.version>0.1.1</amphora-java-client.version>
-        <castor-common.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-common.version>
-        <castor-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-java-client.version>
-        <castor-upload-java-client.version>0.1-SNAPSHOT-4191841095-22-1721229</castor-upload-java-client.version>
-        <ephemeral-java-client.version>0.1-SNAPSHOT-2804677120-20-efc7f8d</ephemeral-java-client.version>
+        <cs-java-client.version>0.2.0</cs-java-client.version>
+        <amphora-java-client.version>0.2.0</amphora-java-client.version>
+        <castor-common.version>0.2.0</castor-common.version>
+        <castor-java-client.version>0.2.0</castor-java-client.version>
+        <castor-upload-java-client.version>0.2.0</castor-upload-java-client.version>
+        <ephemeral-java-client.version>0.2.0</ephemeral-java-client.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
@@ -75,9 +76,8 @@
         <mockito.version>3.11.2</mockito.version>
         <powermock.version>2.0.9</powermock.version>
         <reload4j.version>1.2.24</reload4j.version>
-        <scribejava.version>8.3.1</scribejava.version>
         <slf4j.version>2.0.6</slf4j.version>
-        <log4j.version>2.16.0</log4j.version>
+        <log4j.version>2.24.1</log4j.version>
         <system-rules.version>1.19.0</system-rules.version>
         <undertow.version>2.2.8.Final</undertow.version>
         <vavr.version>0.10.4</vavr.version>
@@ -85,6 +85,11 @@
     </properties>
     <dependencies>
         <!-- Carbyne Stack dependencies -->
+        <dependency>
+            <groupId>io.carbynestack</groupId>
+            <artifactId>java-http-client</artifactId>
+            <version>${cs-java-client.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.carbynestack</groupId>
             <artifactId>amphora-java-client</artifactId>
@@ -133,14 +138,14 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.scribejava</groupId>
-            <artifactId>scribejava-apis</artifactId>
-            <version>${scribejava.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.undertow</groupId>
             <artifactId>undertow-core</artifactId>
             <version>${undertow.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>11.12</version>
         </dependency>
         <dependency>
             <groupId>io.vavr</groupId>
@@ -152,6 +157,12 @@
             <artifactId>commons-text</artifactId>
             <version>${apache.commons.text.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -211,6 +222,13 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito2</artifactId>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -7,14 +7,14 @@
 package io.carbynestack.cli.login;
 
 import static io.carbynestack.cli.login.VcpTokenStore.*;
-import static io.carbynestack.cli.login.VcpTokenStore.load;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-import com.github.scribejava.core.oauth.OAuth20Service;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
+import com.nimbusds.openid.connect.sdk.token.OIDCTokens;
 import io.carbynestack.cli.TemporaryConfiguration;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.ConfigurationUtil;
@@ -27,30 +27,23 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Date;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Configuration.class)
 public class VcpTokenStoreTest {
 
-  @Rule TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
+  @Rule public TemporaryConfiguration temporaryConfiguration = new TemporaryConfiguration();
+  private OIDCTokens oidcTokens;
 
   private static VcpTokenStore createStore(boolean expired) throws Exception {
     Date ref =
         !expired ? new Date() : Date.from(Instant.now().minusSeconds(2 * TokenUtils.VALIDITY));
     Configuration config = ConfigurationUtil.getConfiguration();
     return builder()
-        .token(
-            VcpToken.from(
-                ref, config.getProvider(1).getBaseUrl(), TokenUtils.createToken("apollo")))
-        .token(
-            VcpToken.from(
-                ref, config.getProvider(2).getBaseUrl(), TokenUtils.createToken("starbuck")))
+        .token(VcpToken.from(ref, config.getProvider(1).getBaseUrl(), TokenUtils.createToken()))
+        .token(VcpToken.from(ref, config.getProvider(2).getBaseUrl(), TokenUtils.createToken()))
         .build();
   }
 
@@ -58,6 +51,11 @@ public class VcpTokenStoreTest {
     Writer w = mock(Writer.class);
     doThrow(IOException.class).when(w).write(any(char[].class), anyInt(), anyInt());
     return w;
+  }
+
+  @Before
+  public void configureMocks() throws Exception {
+    oidcTokens = TokenUtils.createToken();
   }
 
   @Test
@@ -93,31 +91,24 @@ public class VcpTokenStoreTest {
 
   @Test
   public void givenValidTokens_whenRefresh_thenDoesNothing() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    VcpTokenStore store =
-        createStore(false).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+    VcpTokenStore store = createStore(false).toBuilder().build();
     assertThat(
         "tokens in store are expired", store.getTokens().stream().noneMatch(VcpToken::isExpired));
     store.refresh();
-    verify(mockedService, times(0)).refreshAccessToken(any());
   }
 
   @Test
   public void givenExpiredTokens_whenRefresh_thenRefreshesTokens() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    doReturn(TokenUtils.createToken("test"))
-        .when(mockedService)
-        .refreshAccessToken(any(), any(String.class));
-    VcpTokenStore store =
-        createStore(true).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+    VcpTokenStore store = createStore(true).toBuilder().build();
+    VcpTokenStore spyStore = spy(store);
+    doReturn(new OIDCTokenResponse(oidcTokens.toOIDCTokens()))
+        .when(spyStore)
+        .sendRefreshToken(Mockito.any(), Mockito.any(), anyBoolean(), anyList());
+
     assertThat(
         "tokens in store are not expired",
-        store.getTokens().stream().allMatch(VcpToken::isExpired));
-    Either<VcpTokenStoreError, VcpTokenStore> refreshed = store.refresh();
+        spyStore.getTokens().stream().allMatch(VcpToken::isExpired));
+    Either<VcpTokenStoreError, VcpTokenStore> refreshed = spyStore.refresh();
     assertThat("refresh failed", refreshed.isRight());
     assertThat(
         "tokens in store are expired after refresh",
@@ -126,12 +117,7 @@ public class VcpTokenStoreTest {
 
   @Test
   public void givenExpiredTokensAndFailingProvider_whenRefresh_thenRefreshFails() throws Exception {
-    PowerMockito.mockStatic(Configuration.class);
-    when(Configuration.getInstance()).thenReturn(ConfigurationUtil.getConfiguration());
-    OAuth20Service mockedService = mock(OAuth20Service.class);
-    doThrow(new IOException()).when(mockedService).refreshAccessToken(any(), any(String.class));
-    VcpTokenStore store =
-        createStore(true).toBuilder().oAuth20ServiceProvider(c -> mockedService).build();
+    VcpTokenStore store = createStore(true).toBuilder().build();
     Either<VcpTokenStoreError, VcpTokenStore> refreshed = store.refresh();
     assertThat("refresh succeeded despite failing provider", refreshed.isLeft());
     assertThat("wrong error returned", refreshed.getLeft() instanceof ByTokenError);

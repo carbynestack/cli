@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -22,7 +22,6 @@ import java.lang.reflect.Field;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.rules.TemporaryFolder;
 
 @Slf4j
@@ -62,12 +61,7 @@ public class TemporaryConfiguration extends TemporaryFolder {
     VcpTokenStore.setDefaultLocation(Option.of(accessTokensFile.toPath()));
     VcpTokenStore.VcpTokenStoreBuilder builder = VcpTokenStore.builder();
     Lists.newArrayList(configuration.getProviders())
-        .forEach(
-            p ->
-                builder.token(
-                    VcpToken.from(
-                        p.getBaseUrl(),
-                        TokenUtils.createToken(RandomStringUtils.randomAlphabetic(10)))));
+        .forEach(p -> builder.token(VcpToken.from(p.getBaseUrl(), TokenUtils.createToken())));
     VcpTokenStore s = builder.build();
     s.persist();
   }

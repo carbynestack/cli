@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2021 - for information on the respective copyright owner
+ * Copyright (c) 2021-2024 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 package io.carbynestack.cli.login;
 
-import static io.carbynestack.cli.login.LoginCommand.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.scribejava.apis.MicrosoftAzureActiveDirectory20Api;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.common.collect.Lists;
+import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.http.HTTPRequest;
+import com.nimbusds.oauth2.sdk.id.ClientID;
+import com.nimbusds.oauth2.sdk.token.RefreshToken;
+import com.nimbusds.openid.connect.sdk.OIDCTokenResponse;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.VcpConfiguration;
+import io.carbynestack.cli.exceptions.CsCliRunnerException;
+import io.carbynestack.cli.util.OAuthUtil;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -24,10 +24,13 @@ import io.vavr.control.Try;
 import java.io.*;
 import java.net.URI;
 import java.nio.file.Path;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -38,35 +41,18 @@ import org.apache.commons.io.FileUtils;
 @Builder(builderClassName = "VcpTokenStoreBuilder", toBuilder = true)
 public class VcpTokenStore {
 
-  public interface VcpTokenStoreError extends AuthenticationError {}
-
-  public enum VcpTokenStoreErrors implements VcpTokenStoreError {
-
-    /** The token store could not be read */
-    READING_TOKEN_STORE_FAILED,
-
-    /** The token store could not be written. */
-    PERSISTING_TOKEN_STORE_FAILED,
-
-    /** The VCP configuration could not be fetched. */
-    VCP_CONFIGURATION_UNAVAILABLE,
-
-    /** Refreshing a token failed */
-    REFRESHING_TOKEN_FAILED
-  }
-
-  @Value
-  @RequiredArgsConstructor(staticName = "of")
-  public static class ByTokenError implements VcpTokenStoreError {
-    @NonNull HashMap<URI, VcpTokenStoreError> errors;
-  }
-
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
   private static Option<Path> customDefaultLocation = Option.none();
-  private static final OAuth2ServiceProvider DEFAULT_OAUTH20_SERVICE_PROVIDER =
-      c ->
-          new ServiceBuilder(c.getOAuth2ClientId())
-              .build(MicrosoftAzureActiveDirectory20Api.custom(TENANT_ID));
+
+  @Singular List<VcpToken> tokens;
+
+  public VcpTokenStore() {
+    this.tokens = Lists.newArrayList();
+  }
+
+  public VcpTokenStore(List<VcpToken> tokens) {
+    this.tokens = tokens;
+  }
 
   public static Path getDefaultLocation() {
     return customDefaultLocation.getOrElse(
@@ -85,7 +71,9 @@ public class VcpTokenStore {
             .onFailure(t -> log.error("reading token store failed", t))
             .toEither()
             .mapLeft(t -> VcpTokenStoreErrors.READING_TOKEN_STORE_FAILED);
-    return refresh ? notRefreshedStore.flatMap(VcpTokenStore::refresh) : notRefreshedStore;
+    return refresh
+        ? notRefreshedStore.flatMap(VcpTokenStore::refresh).peek(VcpTokenStore::persist)
+        : notRefreshedStore;
   }
 
   public static boolean exists() {
@@ -102,33 +90,21 @@ public class VcpTokenStore {
     }
   }
 
-  /*
-   * This is extended by Lombok. Required to make initialization work for Jackson deserialization.
-   */
-  public static class VcpTokenStoreBuilder {
-    private OAuth2ServiceProvider oAuth20ServiceProvider = DEFAULT_OAUTH20_SERVICE_PROVIDER;
-  }
+  OIDCTokenResponse sendRefreshToken(
+      VcpToken token, VcpConfiguration c, boolean insecure, List<Path> trustedCertificates)
+      throws ParseException, IOException, NoSuchAlgorithmException, KeyStoreException,
+          KeyManagementException, CertificateException {
 
-  /*
-   * Used to exclude oAuth20ServiceProvider from JSON serialization as @JsonIgnore does (for some reason) not work
-   * together with @Value class.
-   */
-  @JsonIgnoreType
-  public interface OAuth2ServiceProvider extends Function<VcpConfiguration, OAuth20Service> {}
+    ClientID clientID = new ClientID(c.getOAuth2ClientId());
+    AuthorizationGrant refreshTokenGrant =
+        new RefreshTokenGrant(new RefreshToken(token.getRefreshToken()));
+    Scope authScope = new Scope("offline", "openid");
 
-  @Singular List<VcpToken> tokens;
-
-  @JsonIgnore @EqualsAndHashCode.Exclude OAuth2ServiceProvider oAuth20ServiceProvider;
-
-  public VcpTokenStore() {
-    this.tokens = Lists.newArrayList();
-    this.oAuth20ServiceProvider = DEFAULT_OAUTH20_SERVICE_PROVIDER;
-  }
-
-  public VcpTokenStore(List<VcpToken> tokens, OAuth2ServiceProvider oAuth20ServiceProvider) {
-    this.tokens = tokens;
-    this.oAuth20ServiceProvider =
-        oAuth20ServiceProvider == null ? DEFAULT_OAUTH20_SERVICE_PROVIDER : oAuth20ServiceProvider;
+    TokenRequest request =
+        new TokenRequest(c.getOauth2TokenEndpointUri(), clientID, refreshTokenGrant, authScope);
+    HTTPRequest httpRequest = request.toHTTPRequest();
+    OAuthUtil.setSslContextForRequestWithConfiguration(httpRequest, insecure, trustedCertificates);
+    return OIDCTokenResponse.parse(httpRequest.send());
   }
 
   public Either<VcpTokenStoreError, VcpTokenStore> persist(Writer w) {
@@ -201,13 +177,23 @@ public class VcpTokenStore {
               Date expiration = token.getExpires();
               Duration stillValidFor = Duration.between(Instant.now(), expiration.toInstant());
               if (stillValidFor.toHours() < 1) {
+
                 log.debug("refreshing token for VCP with base URL {}", token.getVcpBaseUrl());
-                OAuth20Service oAuth20Service = getOAuth20ServiceProvider().apply(c);
                 return Try.of(
-                        () ->
-                            oAuth20Service.refreshAccessToken(
-                                token.getRefreshToken(),
-                                String.format("api://%s/Cs.Generic", c.getOAuth2ClientId())))
+                        () -> {
+                          var oidcTokenResponse =
+                              sendRefreshToken(
+                                  token,
+                                  c,
+                                  configuration.isNoSslValidation(),
+                                  configuration.getTrustedCertificates());
+                          if (oidcTokenResponse.indicatesSuccess()) {
+                            return oidcTokenResponse.toSuccessResponse().getOIDCTokens();
+                          } else {
+                            throw new CsCliRunnerException(
+                                oidcTokenResponse.toErrorResponse().getErrorObject().toString());
+                          }
+                        })
                     .onFailure(
                         t ->
                             log.error(
@@ -217,11 +203,34 @@ public class VcpTokenStore {
                                 t))
                     .toEither()
                     .bimap(
-                        t -> (VcpTokenStoreError) VcpTokenStoreErrors.REFRESHING_TOKEN_FAILED,
+                        t -> VcpTokenStoreErrors.REFRESHING_TOKEN_FAILED,
                         t -> VcpToken.from(c.getBaseUrl(), t));
               } else {
                 return Either.right(token);
               }
             });
+  }
+
+  public enum VcpTokenStoreErrors implements VcpTokenStoreError {
+
+    /** The token store could not be read */
+    READING_TOKEN_STORE_FAILED,
+
+    /** The token store could not be written. */
+    PERSISTING_TOKEN_STORE_FAILED,
+
+    /** The VCP configuration could not be fetched. */
+    VCP_CONFIGURATION_UNAVAILABLE,
+
+    /** Refreshing a token failed */
+    REFRESHING_TOKEN_FAILED
+  }
+
+  public interface VcpTokenStoreError extends AuthenticationError {}
+
+  @Value
+  @RequiredArgsConstructor(staticName = "of")
+  public static class ByTokenError implements VcpTokenStoreError {
+    @NonNull HashMap<URI, VcpTokenStoreError> errors;
   }
 }
