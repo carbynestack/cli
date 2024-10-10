@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.0](https://github.com/carbynestack/cli/compare/cli-v0.4.1...cli-v0.5.0) (2024-10-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* add authentication support ([#42](https://github.com/carbynestack/cli/issues/42))
+
+### Features
+
+* add authentication support ([#42](https://github.com/carbynestack/cli/issues/42)) ([5cc06d2](https://github.com/carbynestack/cli/commit/5cc06d2cdd85f961b973336f0b15e3c9ec1473a3))
+
 ## [0.4.1](https://github.com/carbynestack/cli/compare/cli-v0.4.0...cli-v0.4.1) (2023-08-04)
 
 
