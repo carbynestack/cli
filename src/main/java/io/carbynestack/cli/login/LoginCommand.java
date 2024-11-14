@@ -137,7 +137,7 @@ public class LoginCommand {
 
       AuthenticationRequest request =
           new AuthenticationRequest.Builder(
-                  new ResponseType("code"), new Scope("openid", "offline"), clientID, callback)
+                  new ResponseType("code"), new Scope("openid", "offline", "email"), clientID, callback)
               .endpointURI(vcpConfiguration.getOauth2AuthEndpointUri())
               .state(state)
               .nonce(nonce)
