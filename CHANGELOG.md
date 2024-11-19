@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/carbynestack/cli/compare/cli-v0.5.0...cli-v0.5.1) (2024-11-19)
+
+
+### Bug Fixes
+
+* add email scope when requesting token ([#44](https://github.com/carbynestack/cli/issues/44)) ([702ba4c](https://github.com/carbynestack/cli/commit/702ba4c53ccf6a2e6aabb539395f4201981ad3d1))
+
 ## [0.5.0](https://github.com/carbynestack/cli/compare/cli-v0.4.1...cli-v0.5.0) (2024-10-10)
 
 
