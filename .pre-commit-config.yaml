@@ -21,9 +21,10 @@ repos:
     - id: trailing-whitespace
     - id: mixed-line-ending
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.6.0
+  rev: v2.14.0
   hooks:
     - id: pretty-format-java
+      additional_dependencies: ['setuptools']
       args: [--autofix]
 - repo: https://github.com/executablebooks/mdformat
   rev: 0.7.16
