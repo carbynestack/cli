@@ -16,6 +16,8 @@ import io.carbynestack.cli.client.castor.CastorClientCli;
 import io.carbynestack.cli.client.castor.config.CastorClientCliConfig;
 import io.carbynestack.cli.client.ephemeral.EphemeralClientCli;
 import io.carbynestack.cli.client.ephemeral.config.EphemeralClientCliConfig;
+import io.carbynestack.cli.client.thymus.ThymusClientCli;
+import io.carbynestack.cli.client.thymus.config.ThymusClientCliConfig;
 import io.carbynestack.cli.config.CsCliConfig;
 import io.carbynestack.cli.configuration.Configuration;
 import io.carbynestack.cli.configuration.ConfigurationCommand;
@@ -151,6 +153,7 @@ public class CsCliApplication {
     csCli.addClient(new CsClient(new AmphoraClientCliConfig(), AmphoraClientCli.class));
     csCli.addClient(new CsClient(new CastorClientCliConfig(), CastorClientCli.class));
     csCli.addClient(new CsClient(new EphemeralClientCliConfig(), EphemeralClientCli.class));
+    csCli.addClient(new CsClient(new ThymusClientCliConfig(), ThymusClientCli.class));
     try {
       csCli.run(args);
     } catch (ParameterException pe) {
