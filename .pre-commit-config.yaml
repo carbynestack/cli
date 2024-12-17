@@ -24,6 +24,7 @@ repos:
   rev: v2.14.0
   hooks:
     - id: pretty-format-java
+      additional_dependencies: ['setuptools']
       args: [--autofix]
 - repo: https://github.com/executablebooks/mdformat
   rev: 0.7.16

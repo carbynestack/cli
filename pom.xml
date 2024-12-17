@@ -64,6 +64,7 @@
         <castor-java-client.version>0.2.0</castor-java-client.version>
         <castor-upload-java-client.version>0.2.0</castor-upload-java-client.version>
         <ephemeral-java-client.version>0.2.0</ephemeral-java-client.version>
+        <thymus-java-client.version>0.3.0</thymus-java-client.version>
 
         <!-- External dependency versions -->
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
@@ -114,6 +115,11 @@
             <groupId>io.carbynestack</groupId>
             <artifactId>ephemeral-java-client</artifactId>
             <version>${ephemeral-java-client.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.carbynestack</groupId>
+            <artifactId>thymus-java-client</artifactId>
+            <version>${thymus-java-client.version}</version>
         </dependency>
 
         <!-- External dependencies -->

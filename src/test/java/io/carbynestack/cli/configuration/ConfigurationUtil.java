@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2024 - for information on the respective copyright owner
+ * Copyright (c) 2021-2025 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -25,6 +25,8 @@ public class ConfigurationUtil {
         new AmphoraServiceUri(String.format("%s/amphora", vcp1BaseUrl));
     configuration.getProvider(1).castorServiceUri =
         new CastorServiceUri(String.format("%s/castor", vcp1BaseUrl));
+    configuration.getProvider(1).thymusServiceUrl =
+        URI.create(String.format("%s/iam/policies", vcp1BaseUrl));
     configuration.getProvider(1).ephemeralServiceUrl = URI.create(String.format("%s", vcp1BaseUrl));
     configuration.getProvider(1).oAuth2clientId = UUID.randomUUID().toString();
     configuration.getProvider(1).oAuth2CallbackUrl = URI.create("http://localhost/vcp-1");
@@ -37,6 +39,8 @@ public class ConfigurationUtil {
         new AmphoraServiceUri(String.format("%s/amphora", vcp2BaseUrl));
     configuration.getProvider(2).castorServiceUri =
         new CastorServiceUri(String.format("%s/castor", vcp2BaseUrl));
+    configuration.getProvider(2).thymusServiceUrl =
+        URI.create(String.format("%s/iam/policies", vcp2BaseUrl));
     configuration.getProvider(2).ephemeralServiceUrl = URI.create(String.format("%s", vcp2BaseUrl));
     configuration.getProvider(2).oAuth2clientId = UUID.randomUUID().toString();
     configuration.getProvider(2).oAuth2CallbackUrl = URI.create("http://localhost/vcp-2");
