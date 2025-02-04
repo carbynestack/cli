@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/carbynestack/cli/compare/cli-v0.5.1...cli-v0.6.0) (2025-02-04)
+
+
+### Features
+
+* add thymus support ([#46](https://github.com/carbynestack/cli/issues/46)) ([05223fd](https://github.com/carbynestack/cli/commit/05223fd8d8d1c3220fa62ea48d47dc6c2b79d53b))
+
 ## [0.5.1](https://github.com/carbynestack/cli/compare/cli-v0.5.0...cli-v0.5.1) (2024-11-19)
 
 
