@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2024 - for information on the respective copyright owner
+ * Copyright (c) 2021-2025 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -80,6 +80,7 @@ public class VcpConfigurationTest {
     String expectedCasorUrl = String.format("http://%s", RandomStringUtils.randomAlphanumeric(15));
     String expectedEphemeralUrl =
         String.format("http://%s", RandomStringUtils.randomAlphanumeric(15));
+    String expectedThymusUrl = String.format("http://%s", RandomStringUtils.randomAlphanumeric(15));
     String expectedOAuth2CliendId = UUID.randomUUID().toString();
     String expectedOAuth2CallbackUrl = "http://localhost/vcp-1";
     String expectedOAuth2EndpointUri =
@@ -92,6 +93,7 @@ public class VcpConfigurationTest {
         expectedAmphoraUrl,
         expectedCasorUrl,
         expectedEphemeralUrl,
+        expectedThymusUrl,
         expectedOAuth2CliendId,
         expectedOAuth2EndpointUri,
         expectedOAuth2TokenUri,
@@ -117,6 +119,11 @@ public class VcpConfigurationTest {
         systemOutRule.getLog(),
         CoreMatchers.containsString(
             MessageFormat.format(
+                MESSAGES.getString("configuration.request.vcp.thymus-service-url"), "")));
+    Assert.assertThat(
+        systemOutRule.getLog(),
+        CoreMatchers.containsString(
+            MessageFormat.format(
                 MESSAGES.getString("configuration.request.vcp.oauth2-client-id"), "")));
     Assert.assertThat(
         systemOutRule.getLog(),
@@ -128,6 +135,7 @@ public class VcpConfigurationTest {
         new AmphoraServiceUri(expectedAmphoraUrl), vcpConfiguration.getAmphoraServiceUri());
     assertEquals(new CastorServiceUri(expectedCasorUrl), vcpConfiguration.getCastorServiceUri());
     assertEquals(URI.create(expectedEphemeralUrl), vcpConfiguration.getEphemeralServiceUrl());
+    assertEquals(URI.create(expectedThymusUrl), vcpConfiguration.getThymusServiceUrl());
     assertEquals(expectedOAuth2CliendId, vcpConfiguration.getOAuth2ClientId());
     assertEquals(URI.create(expectedOAuth2CallbackUrl), vcpConfiguration.getOAuth2CallbackUrl());
   }

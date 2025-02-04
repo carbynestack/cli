@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2024 - for information on the respective copyright owner
+ * Copyright (c) 2021-2025 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository https://github.com/carbynestack/cli.
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -28,6 +28,7 @@ public class VcpConfiguration {
   static final String AMPHORA_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_AMPHORA_URL";
   static final String CASTOR_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_CASTOR_URL";
   static final String EPHEMERAL_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_EPHEMERAL_URL";
+  static final String THYMUS_URL_ENV_KEY_FORMAT = "CS_VCP_{0}_THYMUS_URL";
   static final String OAUTH2_AUTH_ENDPOINT_URI = "CS_VCP_{0}_OAUTH2_AUTH_ENDPOINT_URI";
   static final String OAUTH2_TOKEN_ENDPOINT_URI = "CS_VCP_{0}_OAUTH2_TOKEN_ENDPOINT_URI";
   static final String OAUTH2_CLIENT_ID_ENV_KEY_FORMAT = "CS_VCP_{0}_OAUTH2_CLIENT_ID";
@@ -35,6 +36,7 @@ public class VcpConfiguration {
   static final String AMPHORA_URL_FORMAT = "{0}amphora";
   static final String CASTOR_URL_FORMAT = "{0}castor";
   static final String EPHEMERAL_URL_FORMAT = "{0}";
+  static final String THYMUS_URL_FORMAT = "{0}thymus";
 
   private static final ResourceBundle MESSAGES =
       ResourceBundle.getBundle(CONFIGURATION_MESSAGE_BUNDLE);
@@ -42,6 +44,7 @@ public class VcpConfiguration {
   AmphoraServiceUri amphoraServiceUri;
   CastorServiceUri castorServiceUri;
   URI ephemeralServiceUrl;
+  URI thymusServiceUrl;
   String oAuth2clientId;
   URI oAuth2AuthEndpointUri;
   URI oAuth2TokenEndpointUri;
@@ -80,6 +83,12 @@ public class VcpConfiguration {
               MESSAGES.getString("configuration.request.vcp.ephemeral-service-url"),
               getActualEphemeralServiceUrl()));
       ephemeralServiceUrl = URI.create(readOrDefault(getActualEphemeralServiceUrl()));
+      System.out.printf(
+          "\t%s",
+          MessageFormat.format(
+              MESSAGES.getString("configuration.request.vcp.thymus-service-url"),
+              getActualThymusServiceUrl()));
+      thymusServiceUrl = URI.create(readOrDefault(getActualThymusServiceUrl()));
       System.out.printf(
           "\t%s",
           MessageFormat.format(
@@ -123,6 +132,7 @@ public class VcpConfiguration {
           new CastorServiceUri(MessageFormat.format(CASTOR_URL_FORMAT, baseUrl.toString()));
       ephemeralServiceUrl =
           URI.create(MessageFormat.format(EPHEMERAL_URL_FORMAT, baseUrl.toString()));
+      thymusServiceUrl = URI.create(MessageFormat.format(THYMUS_URL_FORMAT, baseUrl.toString()));
     }
   }
 
@@ -186,6 +196,22 @@ public class VcpConfiguration {
     this.ephemeralServiceUrl = URI.create(ephemeralServiceUrl);
   }
 
+  public URI getThymusServiceUrl() {
+    return System.getenv(MessageFormat.format(THYMUS_URL_ENV_KEY_FORMAT, providerNumber)) != null
+        ? URI.create(System.getenv(MessageFormat.format(THYMUS_URL_ENV_KEY_FORMAT, providerNumber)))
+        : thymusServiceUrl;
+  }
+
+  @JsonProperty(value = "thymusServiceUrl", required = true, index = 15)
+  private String getActualThymusServiceUrl() {
+    return thymusServiceUrl != null ? thymusServiceUrl.toString() : "";
+  }
+
+  @JsonProperty(value = "thymusServiceUrl", required = true, index = 15)
+  private void setThymusServiceUrl(String thymusServiceUrl) {
+    this.thymusServiceUrl = URI.create(thymusServiceUrl);
+  }
+
   public String getOAuth2ClientId() {
     return System.getenv(MessageFormat.format(OAUTH2_CLIENT_ID_ENV_KEY_FORMAT, providerNumber))
             != null
@@ -193,12 +219,12 @@ public class VcpConfiguration {
         : oAuth2clientId;
   }
 
-  @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
+  @JsonProperty(value = "oauth2ClientId", required = true, index = 16)
   public void setOAuth2ClientId(String oAuth2ClientId) {
     this.oAuth2clientId = oAuth2ClientId;
   }
 
-  @JsonProperty(value = "oauth2ClientId", required = true, index = 15)
+  @JsonProperty(value = "oauth2ClientId", required = true, index = 16)
   public String getActualOAuth2ClientId() {
     return oAuth2clientId != null ? oAuth2clientId : "";
   }
@@ -211,17 +237,17 @@ public class VcpConfiguration {
         : oAuth2CallbackUrl;
   }
 
-  @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 16)
+  @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 17)
   private void setOAuth2CallbackUrl(String oAuth2CallbackUrl) {
     this.oAuth2CallbackUrl = URI.create(oAuth2CallbackUrl);
   }
 
-  @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 16)
+  @JsonProperty(value = "oauth2CallbackUrl", required = true, index = 17)
   private String getActualOAuth2CallbackUrl() {
     return oAuth2CallbackUrl != null ? oAuth2CallbackUrl.toString() : "";
   }
 
-  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
+  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 18)
   private String getActualOauth2AuthEndpointUri() {
     return oAuth2AuthEndpointUri != null ? oAuth2AuthEndpointUri.toString() : "";
   }
@@ -232,12 +258,12 @@ public class VcpConfiguration {
         : oAuth2AuthEndpointUri;
   }
 
-  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 17)
+  @JsonProperty(value = "oauth2AuthEndpointUri", required = true, index = 18)
   public void setOauth2AuthEndpointUri(String oAuth2AuthEndpointUri) {
     this.oAuth2AuthEndpointUri = URI.create(oAuth2AuthEndpointUri);
   }
 
-  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 18)
+  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 19)
   private String getActualOauth2TokenEndpointUri() {
     return oAuth2TokenEndpointUri != null ? oAuth2TokenEndpointUri.toString() : "";
   }
@@ -248,7 +274,7 @@ public class VcpConfiguration {
         : oAuth2TokenEndpointUri;
   }
 
-  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 18)
+  @JsonProperty(value = "oauth2TokenEndpointUri", required = true, index = 19)
   public void setOauth2TokenEndpointUri(String oAuth2TokenEndpointUri) {
     this.oAuth2TokenEndpointUri = URI.create(oAuth2TokenEndpointUri);
   }
@@ -266,6 +292,8 @@ public class VcpConfiguration {
         + castorServiceUri
         + ", ephemeralServiceUrl="
         + ephemeralServiceUrl
+        + ", thymusServiceUrl="
+        + thymusServiceUrl
         + ", oauth2ClientId="
         + oAuth2clientId
         + ", oauth2AuthEndpointUri="
